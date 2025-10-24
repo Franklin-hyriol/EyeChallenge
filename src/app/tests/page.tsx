@@ -1,6 +1,13 @@
 import HeadingPage from "@/components/HeadingPage/HeadingPage";
 import TestCard from "@/components/TestCard/TestCard";
 import tests from "@/data/tests";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "All Vision Tests - Online Eye Challenges | EyeChallenge",
+  description:
+    "Explore our full collection of free online vision tests. Challenge your color sensitivity, reaction speed, night vision, and more. Fun and quick eye tests for everyone.",
+};
 
 export default function Tests() {
   return (
