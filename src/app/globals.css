@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+}
+
+@utility main-container {
+    width: 100%;
+    margin: 0 auto;
+    @media (width >= 40rem /* 640px */) {
+        padding: 0 20px;
+        max-width: 42.5rem /* 680px */;
+    }
+    @media (width >= 48rem /* 768px */) {
+        padding: 0 20px;
+        max-width: 40.5rem /* 808px */;
+    }
+    @media (width >= 64rem /* 1024px */) {
+        padding: 0 40px;
+        max-width: 69rem /* 1104px */;
+    }
+    @media (width >= 80rem /* 1280px */) {
+        padding: 0 40px;
+        max-width: 85rem /* 1360px */;
+    }
+}
