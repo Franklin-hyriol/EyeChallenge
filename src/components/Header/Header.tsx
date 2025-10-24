@@ -9,7 +9,7 @@ const Header = () => {
         <div className="flex-1">
           <Link
             href="/"
-            className="text-xl font-bold leading-tight tracking-[-0.015em] flex items-center gap-2"
+            className="text-xl size-fit font-bold leading-tight tracking-[-0.015em] flex items-center gap-2"
           >
             <Image
               src="/EyeChallenge.svg"
@@ -20,7 +20,12 @@ const Header = () => {
             <span>EyeChallenge</span>
           </Link>
         </div>
-        <div className="flex-none"><ToggleTheme /></div>
+        <div className="flex items-center gap-4">
+          <Link href="/tests" className="btn btn-link btn-lg no-underline">
+            All Tests
+          </Link>
+          <ToggleTheme />
+        </div>
       </div>
     </header>
   );
