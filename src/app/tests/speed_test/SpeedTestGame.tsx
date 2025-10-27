@@ -106,7 +106,7 @@ function SpeedTestGame() {
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-4 mt-8">
+        <div className="flex items-center gap-4 mt-8 justify-center">
           <button className="btn btn-lg btn-outline" onClick={handleShare}>
             <FiShare2 />
             {shareText}

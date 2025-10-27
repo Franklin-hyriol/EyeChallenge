@@ -11,6 +11,7 @@ import {
   FiTrendingUp,
   FiCoffee,
   FiMousePointer,
+  FiAlertTriangle,
 } from "react-icons/fi";
 import { useState, useRef, useEffect } from "react";
 
@@ -204,6 +205,15 @@ export default function ColorTestGame() {
 }
 
 function getScoreInfo(score: number) {
+  if (score < 2) {
+    return {
+      title: "Low Sensitivity",
+      message:
+        "You might have difficulty distinguishing certain colors. Consider consulting a specialist.",
+      icon: FiAlertTriangle,
+      className: "alert-error",
+    };
+  }
   if (score < 5) {
     return {
       title: "Standard Sensitivity",
