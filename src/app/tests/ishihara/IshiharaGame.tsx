@@ -9,6 +9,7 @@ import {
   FiXCircle,
   FiAward,
   FiEye,
+  FiChevronLeft,
 } from "react-icons/fi";
 import IshiharaPlate from "./IshiharaPlate";
 import clsx from "clsx";
@@ -40,13 +41,23 @@ function IshiharaGame() {
     }
   }, [status]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+  const handleNumberClick = (digit: string) => {
+    if (inputValue.length < 2) {
+      setInputValue(inputValue + digit);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
+  const handleClearClick = () => {
+    setInputValue((prev) => prev.slice(0, -1));
+  };
+
+  const handleSeeNothingClick = () => {
+    submitAnswer("none");
+    setInputValue("");
+  };
+
+  const handleSubmit = () => {
+    if (!inputValue) return;
     submitAnswer(inputValue);
     setInputValue("");
   };
@@ -131,7 +142,10 @@ function IshiharaGame() {
   }
 
   return (
-    <div ref={gameAreaRef} className="w-full flex flex-col items-center pt-10">
+    <div
+      ref={gameAreaRef}
+      className="w-full flex flex-col items-center pt-10"
+    >
       <Progress value={timeRemaining} maxValue={ROUND_DURATION} />
       <div className="w-full mt-10 md:mt-12 max-w-4xl">
         <div className="flex items-center justify-center gap-6 sm:gap-10 flex-wrap">
@@ -169,24 +183,38 @@ function IshiharaGame() {
         </div>
       </div>
 
-      <div className="my-10 md:my-12 w-full max-w-lg mx-auto">
+      <div className="my-10 md:my-12 w-full max-w-lg mx-auto flex justify-center">
         <IshiharaPlate numberToDraw={currentNumber} />
       </div>
 
-      <form onSubmit={handleSubmit} className="flex items-center gap-4">
-        <input
-          type="number"
-          value={inputValue}
-          onChange={handleInputChange}
-          className="input input-bordered input-lg w-full max-w-xs"
-          placeholder="Enter number..."
-          autoFocus
-          key={round} // Reset input on new round
-        />
-        <button type="submit" className="btn btn-lg btn-primary">
+      {/* Keypad */}
+      <div className="w-full max-w-xs space-y-3 flex flex-col items-center">
+        <div className="input input-bordered input-lg w-full h-16 text-3xl text-center flex items-center justify-center tracking-widest font-semibold">
+          {inputValue || <span className="text-slate-500 dark:text-slate-400 font-normal">...</span>}
+        </div>
+        <div className="grid grid-cols-5 gap-2 w-full">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((digit) => (
+            <button
+              key={digit}
+              onClick={() => handleNumberClick(digit.toString())}
+              className="btn btn-lg"
+            >
+              {digit}
+            </button>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-2 w-full">
+          <button onClick={handleClearClick} className="btn btn-lg btn-outline">
+            <FiChevronLeft />
+          </button>
+          <button onClick={handleSeeNothingClick} className="btn btn-lg btn-outline">
+            I see nothing
+          </button>
+        </div>
+        <button onClick={handleSubmit} className="btn btn-lg btn-primary w-full">
           Submit
         </button>
-      </form>
+      </div>
 
       <div className="flex items-center gap-4 mt-8">
         {status === "result" && (
