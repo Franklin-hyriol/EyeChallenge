@@ -27,6 +27,7 @@ function IshiharaGame() {
     correctAnswers,
     startGame,
     submitAnswer,
+    restartGame,
     goToIdle,
   } = useIshihara();
 
@@ -218,7 +219,7 @@ function IshiharaGame() {
       <div className="flex items-center gap-4 mt-8">
         <button
           className="btn btn-lg btn-primary"
-          onClick={goToIdle}
+          onClick={restartGame}
         >
           <TbReload /> Restart Test
         </button>

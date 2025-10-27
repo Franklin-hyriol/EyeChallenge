@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 
 type GameStatus = "idle" | "playing" | "result";
 const ROUNDS = 5;
@@ -79,7 +79,9 @@ export function useIshihara() {
     setStatus("idle");
   }, []);
 
-  const correctAnswers = history.filter((h) => h.isCorrect).length;
+  const correctAnswers = useMemo(() => {
+    return history.filter((h) => h.isCorrect).length;
+  }, [history]);
 
   return {
     status,
@@ -92,6 +94,7 @@ export function useIshihara() {
     correctAnswers,
     startGame,
     submitAnswer,
+    restartGame,
     goToIdle,
   };
 }
