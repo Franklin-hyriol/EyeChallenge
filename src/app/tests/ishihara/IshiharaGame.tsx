@@ -27,7 +27,6 @@ function IshiharaGame() {
     correctAnswers,
     startGame,
     submitAnswer,
-    restartGame,
     goToIdle,
   } = useIshihara();
 
@@ -129,7 +128,7 @@ function IshiharaGame() {
           </table>
         </div>
 
-        <div className="flex items-center gap-4 mt-8">
+        <div className="flex items-center gap-4 mt-8 justify-center">
           <button className="btn btn-lg btn-outline" onClick={() => handleShare(correctAnswers)}>
             <FiShare2 /> {shareText}
           </button>
@@ -217,22 +216,12 @@ function IshiharaGame() {
       </div>
 
       <div className="flex items-center gap-4 mt-8">
-        {status === "result" && (
-          <button
-            className="btn btn-lg btn-outline"
-            onClick={() => handleShare(correctAnswers)}
-          >
-            <FiShare2 /> {shareText}
-          </button>
-        )}
-        {["playing", "result"].includes(status) && (
-          <button
-            className="btn btn-lg btn-primary"
-            onClick={status === "playing" ? restartGame : goToIdle}
-          >
-            <TbReload /> Restart Test
-          </button>
-        )}
+        <button
+          className="btn btn-lg btn-primary"
+          onClick={goToIdle}
+        >
+          <TbReload /> Restart Test
+        </button>
       </div>
     </div>
   );

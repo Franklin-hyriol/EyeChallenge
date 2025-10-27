@@ -68,8 +68,18 @@ const IshiharaPlate = ({ numberToDraw }: IshiharaPlateProps) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // --- Logique de couleurs dynamiques ---
+    const baseHue = Math.random() * 360;
+    const numberHue = (baseHue + 120 + Math.random() * 60) % 360;
+
+    const bgSaturation = 0.5 + Math.random() * 0.2;
+    const bgValue = 0.8 + Math.random() * 0.15;
+
+    const numSaturation = 0.6 + Math.random() * 0.2;
+    const numValue = 0.6 + Math.random() * 0.15;
+
     // --- Logique de dessin principale ---
-    
+
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, 400, 400);
 
@@ -102,8 +112,8 @@ const IshiharaPlate = ({ numberToDraw }: IshiharaPlateProps) => {
       const isOnText = pixel[0] === 0;
 
       const color = isOnText
-        ? hsvToRgb(148 + Math.random() * 48, 0.67, 0.66)
-        : hsvToRgb(22 + Math.random() * 36, 0.58, 0.91);
+        ? hsvToRgb(numberHue + Math.random() * 20 - 10, numSaturation, numValue)
+        : hsvToRgb(baseHue + Math.random() * 30 - 15, bgSaturation, bgValue);
 
       dots.push({ x, y, radius, isOnText, color });
     }
@@ -115,7 +125,9 @@ const IshiharaPlate = ({ numberToDraw }: IshiharaPlateProps) => {
         let minDist = Infinity;
         for (let k = 0; k < dots.length; k++) {
           if (j === k) continue;
-          const dist = calcDistance(dots[j], dots[k]) - (dots[j].radius + dots[k].radius + MIN_DOT_DISTANCE);
+          const dist =
+            calcDistance(dots[j], dots[k]) -
+            (dots[j].radius + dots[k].radius + MIN_DOT_DISTANCE);
           if (dist < minDist) minDist = dist;
         }
         if (minDist > 0) dots[j].radius += minDist;
@@ -138,7 +150,6 @@ const IshiharaPlate = ({ numberToDraw }: IshiharaPlateProps) => {
       );
       ctx.fill();
     });
-
   }, [numberToDraw]);
 
   return <canvas ref={canvasRef} width={400} height={400} className="rounded-full" />;

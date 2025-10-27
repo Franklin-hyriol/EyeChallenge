@@ -6,6 +6,9 @@ type GameStatus = "idle" | "playing" | "result";
 const ROUNDS = 5;
 const ROUND_DURATION = 15; // 15 seconds per plate
 
+const successSound = typeof window !== "undefined" ? new Audio("/true.mp3") : null;
+const failSound = typeof window !== "undefined" ? new Audio("/false.mp3") : null;
+
 export function useIshihara() {
   const [status, setStatus] = useState<GameStatus>("idle");
   const [round, setRound] = useState(0);
@@ -31,6 +34,11 @@ export function useIshihara() {
 
   const submitAnswer = useCallback((answer: string) => {
     const isCorrect = answer === currentNumber.toString();
+    if (isCorrect) {
+      successSound?.play();
+    } else {
+      failSound?.play();
+    }
     const newHistory = [...history, { number: currentNumber, answer, isCorrect }];
     setHistory(newHistory);
     nextRound();
@@ -84,7 +92,6 @@ export function useIshihara() {
     correctAnswers,
     startGame,
     submitAnswer,
-    restartGame,
     goToIdle,
   };
 }
