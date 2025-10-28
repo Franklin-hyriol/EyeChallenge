@@ -142,11 +142,8 @@ export default function ShellGame() {
                   'cursor-pointer': status === 'selecting',
                   'cursor-wait': status !== 'selecting',
 
-                  // Highlighting state
-                  'bg-green-500': status === 'highlighting' && circle.isTarget,
-
-                  // Feedback state
-                  'bg-green-500': status === 'feedback' && circle.isTarget,
+                  // Highlighting or Feedback state for the correct circle
+                  'bg-green-500': (status === 'highlighting' && circle.isTarget) || (status === 'feedback' && circle.isTarget),
                   'bg-red-500': status === 'feedback' && selection?.correct === false && selection.index === index,
 
                   // Default color
