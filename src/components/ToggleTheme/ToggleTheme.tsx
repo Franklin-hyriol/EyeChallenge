@@ -10,7 +10,7 @@ function ToggleTheme() {
     if (savedTheme) {
       setTheme(savedTheme);
     } else {
-      setTheme("light");
+      setTheme("visiontest-light");
     }
   }, []);
 
@@ -23,9 +23,9 @@ function ToggleTheme() {
 
   const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      setTheme("dark");
+      setTheme("visiontest-dark");
     } else {
-      setTheme("light");
+      setTheme("visiontest-light");
     }
   };
 
@@ -51,10 +51,10 @@ function ToggleTheme() {
       </svg>
       <input
         type="checkbox"
-        value="dark"
+        value="visiontest-dark"
         className="toggle theme-controller"
         onChange={handleToggle}
-        checked={theme === "dark"}
+        checked={theme === "visiontest-dark"}
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

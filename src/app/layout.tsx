@@ -24,7 +24,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                const theme = localStorage.getItem('theme') || 'light';
+                const theme = localStorage.getItem('theme') || 'visiontest-light';
                 document.documentElement.setAttribute('data-theme', theme);
               })();
             `,
