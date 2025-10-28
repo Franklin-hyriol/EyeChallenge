@@ -74,27 +74,43 @@ export function useShellGame(): UseShellGameReturn {
   const shuffleCircles = useCallback(async () => {
     setStatus('shuffling');
     let tempCircles = [...circles];
+    const moveDuration = shuffleSpeedRef.current / 3;
 
     for (let i = 0; i < numMovesRef.current; i++) {
-      await new Promise((resolve) => setTimeout(resolve, shuffleSpeedRef.current + 100));
-
+      // Pick two different circles to swap
       const idx1 = Math.floor(Math.random() * tempCircles.length);
       let idx2 = Math.floor(Math.random() * tempCircles.length);
       while (idx1 === idx2) {
         idx2 = Math.floor(Math.random() * tempCircles.length);
       }
 
-      const pos1 = { x: tempCircles[idx1].x, y: tempCircles[idx1].y };
-      const pos2 = { x: tempCircles[idx2].x, y: tempCircles[idx2].y };
-      tempCircles[idx1].x = pos2.x;
-      tempCircles[idx1].y = pos2.y;
-      tempCircles[idx2].x = pos1.x;
-      tempCircles[idx2].y = pos1.y;
+      const circle1 = tempCircles[idx1];
+      const circle2 = tempCircles[idx2];
 
+      // --- 3-Step Animation ---
+      const yOffset = 60; // How far apart they move vertically
+
+      // 1. Move apart vertically
+      circle1.y -= yOffset;
+      circle2.y += yOffset;
       setCircles([...tempCircles]);
+      await new Promise((resolve) => setTimeout(resolve, moveDuration));
+
+      // 2. Cross over horizontally
+      const x1 = circle1.x;
+      circle1.x = circle2.x;
+      circle2.x = x1;
+      setCircles([...tempCircles]);
+      await new Promise((resolve) => setTimeout(resolve, moveDuration));
+
+      // 3. Move back into the horizontal line
+      circle1.y += yOffset;
+      circle2.y -= yOffset;
+      setCircles([...tempCircles]);
+      await new Promise((resolve) => setTimeout(resolve, moveDuration));
     }
 
-    await new Promise((resolve) => setTimeout(resolve, shuffleSpeedRef.current));
+    await new Promise((resolve) => setTimeout(resolve, 100));
     setStatus('selecting');
   }, [circles]);
 

@@ -153,7 +153,7 @@ export default function ShellGame() {
                 }
               )}
               style={{
-                transition: `transform ${shuffleSpeed}ms ease-in-out, background-color 300ms`,
+                transition: `transform ${shuffleSpeed / 3}ms ease-in-out, background-color 300ms`,
                 transform: `translateX(${circle.x}px) translateY(${circle.y}px) scale(${scale})`,
               }}
             />
