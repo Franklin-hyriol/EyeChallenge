@@ -22,12 +22,13 @@ export interface UseShellGameReturn {
   circles: Circle[];
   selection: { index: number; correct: boolean } | null;
   shuffleSpeed: number;
+  timeLeft: number;
   startGame: () => void;
   handleCircleClick: (clickedIndex: number) => void;
 }
 
-
 const ROUNDS_PER_GAME = 5;
+const SELECTION_TIME = 5; // seconds
 const INITIAL_CIRCLES = 3;
 const MAX_CIRCLES = 7; // Maximum number of circles
 const INITIAL_SHUFFLE_MOVES = 2; // Start with fewer moves
@@ -43,48 +44,46 @@ export function useShellGame(): UseShellGameReturn {
   const [score, setScore] = useState(0);
   const [circles, setCircles] = useState<Circle[]>([]);
   const [selection, setSelection] = useState<{ index: number; correct: boolean } | null>(null);
+  const [timeLeft, setTimeLeft] = useState(SELECTION_TIME);
 
-  // --- Difficulty Refs ---
+  // --- Refs ---
   const numCirclesRef = useRef(INITIAL_CIRCLES);
   const shuffleSpeedRef = useRef(INITIAL_SHUFFLE_SPEED);
   const numMovesRef = useRef(INITIAL_SHUFFLE_MOVES);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // --- Game Flow Callbacks ---
   const startRound = useCallback(() => {
-    setStatus('idle'); // Reset status before calculating new positions
     setSelection(null);
     setRound((r) => r + 1);
 
     const currentNumCircles = numCirclesRef.current;
     const targetIndex = Math.floor(Math.random() * currentNumCircles);
 
-    // Position circles in a horizontal line
     const newCircles = Array.from({ length: currentNumCircles }, (_, i) => ({
       id: i,
-      x: (i - (currentNumCircles - 1) / 2) * 120, // e.g., -120, 0, 120 for 3 circles
+      x: (i - (currentNumCircles - 1) / 2) * 120,
       y: 0,
       isTarget: i === targetIndex,
     }));
 
     setCircles(newCircles);
     setStatus('highlighting');
-  }, [round, score]);
+  }, []);
 
   const shuffleCircles = useCallback(async () => {
     setStatus('shuffling');
     let tempCircles = [...circles];
 
     for (let i = 0; i < numMovesRef.current; i++) {
-      await new Promise((resolve) => setTimeout(resolve, shuffleSpeedRef.current + 100)); // Wait for animation
+      await new Promise((resolve) => setTimeout(resolve, shuffleSpeedRef.current + 100));
 
-      // Pick two different circles to swap
       const idx1 = Math.floor(Math.random() * tempCircles.length);
       let idx2 = Math.floor(Math.random() * tempCircles.length);
       while (idx1 === idx2) {
         idx2 = Math.floor(Math.random() * tempCircles.length);
       }
 
-      // Swap their positions
       const pos1 = { x: tempCircles[idx1].x, y: tempCircles[idx1].y };
       const pos2 = { x: tempCircles[idx2].x, y: tempCircles[idx2].y };
       tempCircles[idx1].x = pos2.x;
@@ -99,53 +98,42 @@ export function useShellGame(): UseShellGameReturn {
     setStatus('selecting');
   }, [circles]);
 
+  const handleTimeout = useCallback(() => {
+    failSound?.play();
+    setSelection({ index: -1, correct: false }); // -1 indicates a timeout
+    setStatus('feedback');
+
+    setTimeout(() => {
+      if (round >= ROUNDS_PER_GAME) {
+        setStatus('result');
+      } else {
+        startRound();
+      }
+    }, 1500);
+  }, [round, startRound]);
+
   const handleCircleClick = (clickedIndex: number) => {
     if (status !== 'selecting') return;
+    if (timerRef.current) clearInterval(timerRef.current);
 
-        const isCorrect = circles[clickedIndex].isTarget;
+    const isCorrect = circles[clickedIndex].isTarget;
+    setSelection({ index: clickedIndex, correct: isCorrect });
 
-        setSelection({ index: clickedIndex, correct: isCorrect });
-
-    
-
-        if (isCorrect) {
-
-          successSound?.play();
-
-          setScore((s) => s + 1);
-
-    
-
-          // --- Difficulty Progression on Success ---
-
-          if (numCirclesRef.current < MAX_CIRCLES && round % 2 !== 0) { // Add a circle every other round
-
-            numCirclesRef.current++;
-
-          }
-
-          if (shuffleSpeedRef.current > 200) {
-
-            shuffleSpeedRef.current -= 25; // Faster
-
-          }
-
-          if (numMovesRef.current < 10) {
-
-            numMovesRef.current++; // More moves
-
-          }
-
-        } else {
-
-          failSound?.play();
-        }
+    if (isCorrect) {
+      successSound?.play();
+      setScore((s) => s + 1);
+      if (numCirclesRef.current < MAX_CIRCLES && round % 2 !== 0) numCirclesRef.current++;
+      if (shuffleSpeedRef.current > 200) shuffleSpeedRef.current -= 25;
+      if (numMovesRef.current < 10) numMovesRef.current++;
+    } else {
+      failSound?.play();
+    }
 
     setStatus('feedback');
 
     setTimeout(() => {
       if (round >= ROUNDS_PER_GAME) {
-        setStatus('result'); // Final result screen
+        setStatus('result');
       } else {
         startRound();
       }
@@ -166,18 +154,32 @@ export function useShellGame(): UseShellGameReturn {
     if (status === 'highlighting') {
       const timer = setTimeout(() => {
         shuffleCircles();
-      }, 1000); // Highlight for 1 second
+      }, 1000);
       return () => clearTimeout(timer);
     }
+
+    if (status === 'selecting') {
+      setTimeLeft(SELECTION_TIME);
+      timerRef.current = setInterval(() => {
+        setTimeLeft(prev => prev - 1);
+      }, 1000);
+      return () => { if (timerRef.current) clearInterval(timerRef.current) };
+    }
+
   }, [status, shuffleCircles]);
 
-  // This effect handles the end of the game
+  useEffect(() => {
+    if (timeLeft === 0 && status === 'selecting') {
+      if (timerRef.current) clearInterval(timerRef.current);
+      handleTimeout();
+    }
+  }, [timeLeft, status, handleTimeout]);
+
   useEffect(() => {
     if (round > ROUNDS_PER_GAME) {
         setStatus('result');
     }
   }, [round]);
-
 
   return {
     status,
@@ -187,6 +189,7 @@ export function useShellGame(): UseShellGameReturn {
     circles,
     selection,
     shuffleSpeed: shuffleSpeedRef.current,
+    timeLeft,
     startGame,
     handleCircleClick,
   };

@@ -7,8 +7,11 @@ import { useShellGame, Circle } from '@/hooks/useShellGame';
 import { TbReload } from 'react-icons/tb';
 import { FiShare2, FiCheckCircle, FiAward, FiEye, FiArrowRight } from 'react-icons/fi';
 import clsx from 'clsx';
+import Progress from '@/components/Progress/Progress';
 
-function ShellGame() {
+const SELECTION_TIME = 5; // Must match the value in the hook
+
+export default function ShellGame() {
   const {
     status,
     round,
@@ -17,10 +20,12 @@ function ShellGame() {
     circles,
     selection,
     shuffleSpeed,
+    timeLeft,
     startGame,
     handleCircleClick,
   } = useShellGame();
 
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [shareText, setShareText] = useState('Share my score');
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -54,12 +59,12 @@ function ShellGame() {
     switch (status) {
       case 'highlighting': return 'Memorize the green circle!';
       case 'shuffling': return 'Follow the circle...';
-      case 'selecting': return 'Which circle was green?';
+      case 'selecting':
+      case 'feedback': // Show same message during feedback
+        return 'Which circle was green?';
       default: return 'Test Complete!';
     }
   };
-
-  const isGameOver = (status === 'result' && round >= ROUNDS) || (status === 'idle' && round >= ROUNDS);
 
   // --- Render Logic ---
   if (status === 'idle' && round === 0) {
@@ -72,6 +77,7 @@ function ShellGame() {
     );
   }
 
+  const isGameOver = (status === 'result' && round >= ROUNDS) || (status === 'idle' && round >= ROUNDS);
   if (isGameOver) {
      const feedback = getFeedback(score);
      return (
@@ -98,14 +104,21 @@ function ShellGame() {
 
   return (
     <div ref={gameAreaRef} className="w-full flex flex-col items-center pt-10">
+      <Progress value={timeLeft} maxValue={SELECTION_TIME} />
+
       {/* Stats Header */}
       <div className="w-full mt-10 md:mt-12 max-w-4xl">
         <div className="flex items-center justify-center gap-6 sm:gap-10 flex-wrap">
-          <div className="text-center flex flex-col"><span className="text-slate-500 dark:text-slate-400 text-sm font-medium">ROUND</span><span className="text-4xl font-bold leading-normal">{round} / {ROUNDS}</span></div>
-          <div className="w-px h-16 bg-slate-500 dark:bg-slate-400 hidden sm:block"></div>
           <div className="text-center flex flex-col"><span className="text-slate-500 dark:text-slate-400 text-sm font-medium">SCORE</span><span className="text-4xl font-bold leading-normal">{score}</span></div>
+          <div className="w-px h-16 bg-slate-500 dark:bg-slate-400 hidden sm:block"></div>
+          <div className="text-center flex flex-col">
+            <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">TIME LEFT</span>
+            <span className={clsx("text-4xl font-bold leading-normal text-primary", { "text-red-500 animate-pulse": timeLeft <= 2 })}>{timeLeft}s</span>
+          </div>
+          <div className="w-px h-16 bg-slate-500 dark:bg-slate-400 hidden sm:block"></div>
+          <div className="text-center flex flex-col"><span className="text-slate-500 dark:text-slate-400 text-sm font-medium">ROUND</span><span className="text-4xl font-bold leading-normal">{round} / {ROUNDS}</span></div>
         </div>
-        <div role="alert" className="alert alert-info flex justify-center mt-4 md:mt-6 w-fit m-auto">
+        <div role="alert" className={clsx('alert alert-info flex justify-center mt-4 md:mt-6 w-fit m-auto')}>
           <FiEye />
           <span className="font-semibold">{getStatusMessage()}</span>
         </div>
@@ -113,31 +126,43 @@ function ShellGame() {
 
       {/* Game Arena */}
       <div className="relative w-full max-w-3xl h-48 my-10 md:my-12 flex items-center justify-center">
-        {circles.map((circle, index) => (
-          <div
-            key={circle.id}
-            onClick={() => handleCircleClick(index)}
-            className={clsx(
-              'absolute w-20 h-20 rounded-full border-4 border-transparent',
-              {
-                'bg-green-500': status === 'highlighting' && circle.isTarget,
-                'bg-primary': status !== 'highlighting',
-                'cursor-pointer hover:scale-110': status === 'selecting',
-                'cursor-wait': status !== 'selecting',
-                // Feedback state borders
-                'border-green-500': status === 'feedback' && circle.isTarget,
-                'border-red-500': status === 'feedback' && !circle.isTarget && selection?.index === index,
-              }
-            )}
-            style={{
-              transition: `transform ${shuffleSpeed}ms ease-in-out, background-color 300ms`,
-              transform: `translateX(${circle.x}px) translateY(${circle.y}px)`,
-            }}
-          />
-        ))}
+        {circles.map((circle: Circle, index: number) => {
+          const isHovered = hoveredIndex === index;
+          const scale = isHovered && status === 'selecting' ? 1.1 : 1;
+
+          return (
+            <div
+              key={circle.id}
+              onClick={() => handleCircleClick(index)}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className={clsx(
+                'absolute w-20 h-20 rounded-full transition-colors',
+                {
+                  'cursor-pointer': status === 'selecting',
+                  'cursor-wait': status !== 'selecting',
+
+                  // Highlighting state
+                  'bg-green-500': status === 'highlighting' && circle.isTarget,
+
+                  // Feedback state
+                  'bg-green-500': status === 'feedback' && circle.isTarget,
+                  'bg-red-500': status === 'feedback' && selection?.correct === false && selection.index === index,
+
+                  // Default color
+                  'bg-primary': status !== 'highlighting' && status !== 'feedback',
+                  // Fade out non-selected, non-target circles during feedback
+                  'opacity-50': status === 'feedback' && !circle.isTarget && selection?.index !== index,
+                }
+              )}
+              style={{
+                transition: `transform ${shuffleSpeed}ms ease-in-out, background-color 300ms`,
+                transform: `translateX(${circle.x}px) translateY(${circle.y}px) scale(${scale})`,
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );
 }
-
-export default ShellGame;
