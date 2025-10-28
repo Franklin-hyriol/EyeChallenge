@@ -29,6 +29,12 @@ const tests = [
     description: "Which circle is slightly bigger?",
     link: "tests/precision_perception",
   },
+  {
+    image: "/shell_game.png",
+    title: "Shell game (Visual tracking)",
+    description: "Follow the ball as the cups move — can your eyes keep up?",
+    link: "tests/shell_game",
+  },
 ];
 
 export default tests;
