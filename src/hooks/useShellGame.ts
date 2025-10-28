@@ -32,7 +32,7 @@ const SELECTION_TIME = 5; // seconds
 const INITIAL_CIRCLES = 3;
 const MAX_CIRCLES = 7; // Maximum number of circles
 const INITIAL_SHUFFLE_MOVES = 2; // Start with fewer moves
-const INITIAL_SHUFFLE_SPEED = 500; // Start slower
+const INITIAL_SHUFFLE_SPEED = 750; // Start slower
 
 const successSound = typeof window !== 'undefined' ? new Audio('/true.mp3') : null;
 const failSound = typeof window !== 'undefined' ? new Audio('/false.mp3') : null;
@@ -160,7 +160,7 @@ export function useShellGame(): UseShellGameReturn {
     setRound(0);
     setScore(0);
     numCirclesRef.current = INITIAL_CIRCLES;
-    shuffleSpeedRef.current = 400;
+    shuffleSpeedRef.current = INITIAL_SHUFFLE_SPEED;
     numMovesRef.current = 3;
     startRound();
   }, [startRound]);
