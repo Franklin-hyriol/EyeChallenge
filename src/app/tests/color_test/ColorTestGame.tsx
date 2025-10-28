@@ -12,8 +12,11 @@ import {
   FiCoffee,
   FiMousePointer,
   FiAlertTriangle,
+  FiArrowRight,
 } from "react-icons/fi";
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useNextChallenge } from "@/hooks/useNextChallenge";
 
 export default function ColorTestGame() {
   const {
@@ -30,6 +33,8 @@ export default function ColorTestGame() {
 
   const [shareText, setShareText] = useState("Share my score");
   const gameAreaRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const nextTest = useNextChallenge();
 
   const gridCols = Math.ceil(Math.sqrt(colors.length));
 
@@ -135,7 +140,7 @@ export default function ColorTestGame() {
         {status === "playing" && (
           <div
             role="alert"
-            className="alert alert-info flex justify-center mt-4 md:mt-6"
+            className="alert alert-info flex justify-center mt-4 md:mt-6 w-fit m-auto"
           >
             <FiMousePointer />
             <span className="font-semibold">Click on the darkest square</span>
@@ -188,7 +193,7 @@ export default function ColorTestGame() {
         </div>
       )}
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 flex-wrap justify-center">
         {status === "gameOver" && (
           <button className="btn btn-lg btn-outline" onClick={handleShare}>
             <FiShare2 />
@@ -199,6 +204,14 @@ export default function ColorTestGame() {
           <TbReload />
           Restart Test
         </button>
+        {status === "gameOver" && (
+          <button
+            className="btn btn-lg btn-secondary"
+            onClick={() => router.push(`/${nextTest.link}`)}
+          >
+            Next Challenge <FiArrowRight />
+          </button>
+        )}
       </div>
     </div>
   );

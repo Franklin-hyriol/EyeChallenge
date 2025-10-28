@@ -23,6 +23,12 @@ const tests = [
     description: "Can you see the hidden numbers?",
     link: "tests/ishihara",
   },
+  {
+    image: "/bigger_circle.png",
+    title: "Precision perception",
+    description: "Which circle is slightly bigger?",
+    link: "tests/precision_perception",
+  },
 ];
 
 export default tests;

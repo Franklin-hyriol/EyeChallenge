@@ -10,7 +10,10 @@ import {
   FiAward,
   FiTrendingUp,
   FiEye,
+  FiArrowRight,
 } from "react-icons/fi";
+import { useRouter } from "next/navigation";
+import { useNextChallenge } from "@/hooks/useNextChallenge";
 
 const TARGET_SIZE = 64; // Target size in pixels
 
@@ -34,6 +37,8 @@ function NightVisionGame() {
   const [position, setPosition] = useState({ top: "50%", left: "50%" });
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const blackBoxRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const nextTest = useNextChallenge();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -117,12 +122,18 @@ function NightVisionGame() {
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-4 mt-8">
+        <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
           <button className="btn btn-lg btn-outline" onClick={() => handleShare(averageTime)}>
             <FiShare2 /> {shareText}
           </button>
           <button className="btn btn-lg btn-primary" onClick={goToIdle}>
             <TbReload /> Restart Test
+          </button>
+          <button
+            className="btn btn-lg btn-secondary"
+            onClick={() => router.push(`/${nextTest.link}`)}
+          >
+            Next Challenge <FiArrowRight />
           </button>
         </div>
       </div>
@@ -155,7 +166,7 @@ function NightVisionGame() {
       </div>
       <div
         role="alert"
-        className="alert alert-info flex justify-center mt-4 md:mt-6 max-w-lg"
+        className="alert alert-info flex justify-center mt-4 md:mt-6 w-fit m-auto"
       >
         <FiEye />
         <span className="font-semibold">Click the circle as soon as you see it</span>
