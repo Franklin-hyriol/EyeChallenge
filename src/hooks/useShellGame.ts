@@ -55,6 +55,7 @@ export function useShellGame(): UseShellGameReturn {
   // --- Game Flow Callbacks ---
   const startRound = useCallback(() => {
     setSelection(null);
+    setTimeLeft(SELECTION_TIME); // Reset timer for the new round
     setRound((r) => r + 1);
 
     const currentNumCircles = numCirclesRef.current;
@@ -120,6 +121,7 @@ export function useShellGame(): UseShellGameReturn {
     setStatus('feedback');
 
     setTimeout(() => {
+      setSelection(null); // Explicitly clear selection before next round
       if (round >= ROUNDS_PER_GAME) {
         setStatus('result');
       } else {
