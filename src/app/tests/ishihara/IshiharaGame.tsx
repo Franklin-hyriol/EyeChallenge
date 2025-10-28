@@ -10,10 +10,13 @@ import {
   FiAward,
   FiEye,
   FiChevronLeft,
+  FiArrowRight,
 } from "react-icons/fi";
 import IshiharaPlate from "./IshiharaPlate";
 import clsx from "clsx";
 import Progress from "@/components/Progress/Progress";
+import { useRouter } from "next/navigation";
+import { useNextChallenge } from "@/hooks/useNextChallenge";
 
 function IshiharaGame() {
   const {
@@ -34,6 +37,8 @@ function IshiharaGame() {
   const [inputValue, setInputValue] = useState("");
   const [shareText, setShareText] = useState("Share my score");
   const gameAreaRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const nextTest = useNextChallenge();
 
   useEffect(() => {
     if (status === "playing" && gameAreaRef.current) {
@@ -129,12 +134,18 @@ function IshiharaGame() {
           </table>
         </div>
 
-        <div className="flex items-center gap-4 mt-8 justify-center">
+        <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
           <button className="btn btn-lg btn-outline" onClick={() => handleShare(correctAnswers)}>
             <FiShare2 /> {shareText}
           </button>
           <button className="btn btn-lg btn-primary" onClick={goToIdle}>
             <TbReload /> Restart Test
+          </button>
+          <button
+            className="btn btn-lg btn-secondary"
+            onClick={() => router.push(`/${nextTest.link}`)}
+          >
+            Next Challenge <FiArrowRight />
           </button>
         </div>
       </div>
@@ -181,6 +192,15 @@ function IshiharaGame() {
             </span>
           </div>
         </div>
+        {status === "playing" && (
+          <div
+            role="alert"
+            className="alert alert-info flex justify-center mt-4 md:mt-6 w-fit m-auto"
+          >
+            <FiEye />
+            <span className="font-semibold">Enter the number you see in the plate.</span>
+          </div>
+        )}
       </div>
 
       <div className="my-10 md:my-12 w-full max-w-lg mx-auto flex justify-center">

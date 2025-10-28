@@ -6,11 +6,14 @@ import {
   FiZap,
   FiCheckCircle,
   FiAward,
+  FiArrowRight,
 } from "react-icons/fi";
 import { RiTimerFlashLine } from "react-icons/ri";
 import { TbReload } from "react-icons/tb";
 import clsx from "clsx";
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useNextChallenge } from "@/hooks/useNextChallenge";
 
 function SpeedTestGame() {
   const {
@@ -26,6 +29,8 @@ function SpeedTestGame() {
 
   const [shareText, setShareText] = useState("Share my score");
   const gameAreaRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const nextTest = useNextChallenge();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -106,7 +111,7 @@ function SpeedTestGame() {
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-4 mt-8 justify-center">
+        <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
           <button className="btn btn-lg btn-outline" onClick={handleShare}>
             <FiShare2 />
             {shareText}
@@ -114,6 +119,12 @@ function SpeedTestGame() {
           <button className="btn btn-lg btn-primary" onClick={goToIdle}>
             <TbReload />
             Restart Test
+          </button>
+          <button
+            className="btn btn-lg btn-secondary"
+            onClick={() => router.push(`/${nextTest.link}`)}
+          >
+            Next Challenge <FiArrowRight />
           </button>
         </div>
       </div>
@@ -161,7 +172,7 @@ function SpeedTestGame() {
 
         <div
           role="alert"
-          className="alert alert-info flex justify-center mt-4 md:mt-6"
+          className="alert alert-info flex justify-center mt-4 md:mt-6 w-fit m-auto"
         >
           <FiMousePointer />
           <span className="font-semibold">
