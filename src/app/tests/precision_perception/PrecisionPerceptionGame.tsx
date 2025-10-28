@@ -70,18 +70,21 @@ function PrecisionPerceptionGame() {
   if (status === "result") {
     const feedback = getPrecisionFeedback(score);
     return (
-      <div className="text-center my-10 md:my-12 max-w-md mx-auto">
-        <h2 className="text-2xl font-bold">Test Complete!</h2>
-        <p className="text-xl font-semibold mt-2 mb-4">
-          You scored {score} / {ROUNDS}
-        </p>
-        <div role="alert" className={clsx("alert mb-4", feedback.className)}>
-          <feedback.icon className="text-2xl" />
-          <div>
-            <h3 className="font-bold">{feedback.title}</h3>
-            <div className="text-xs">{feedback.message}</div>
+      <>
+        <div className="text-center my-10 md:my-12 max-w-md mx-auto">
+          <h2 className="text-2xl font-bold">Test Complete!</h2>
+          <p className="text-xl font-semibold mt-2 mb-4">
+            You scored {score} / {ROUNDS}
+          </p>
+          <div role="alert" className={clsx("alert mb-4", feedback.className)}>
+            <feedback.icon className="text-2xl" />
+            <div>
+              <h3 className="font-bold">{feedback.title}</h3>
+              <div className="text-xs">{feedback.message}</div>
+            </div>
           </div>
         </div>
+
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
           <button className="btn btn-lg btn-outline" onClick={handleShare}>
             <FiShare2 /> {shareText}
@@ -96,7 +99,7 @@ function PrecisionPerceptionGame() {
             Next Challenge <FiArrowRight />
           </button>
         </div>
-      </div>
+      </>
     );
   }
 

@@ -92,46 +92,48 @@ function IshiharaGame() {
   if (status === "result") {
     const feedback = getIshiharaFeedback(correctAnswers);
     return (
-      <div className="text-center my-10 md:my-12 max-w-md mx-auto">
-        <h2 className="text-2xl font-bold">Test Complete!</h2>
-        <p className="text-xl font-semibold mt-2 mb-4">
-          You scored {correctAnswers} / {ROUNDS}
-        </p>
-        <div role="alert" className={clsx("alert mb-4", feedback.className)}>
-          <feedback.icon className="text-2xl" />
-          <div>
-            <h3 className="font-bold">{feedback.title}</h3>
-            <div className="text-xs">{feedback.message}</div>
+      <>
+        <div className="text-center my-10 md:my-12 max-w-md mx-auto">
+          <h2 className="text-2xl font-bold">Test Complete!</h2>
+          <p className="text-xl font-semibold mt-2 mb-4">
+            You scored {correctAnswers} / {ROUNDS}
+          </p>
+          <div role="alert" className={clsx("alert mb-4", feedback.className)}>
+            <feedback.icon className="text-2xl" />
+            <div>
+              <h3 className="font-bold">{feedback.title}</h3>
+              <div className="text-xs">{feedback.message}</div>
+            </div>
           </div>
-        </div>
 
-        <div className="overflow-x-auto">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>Plate</th>
-                <th>Correct Number</th>
-                <th>Your Answer</th>
-                <th>Result</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((item, index) => (
-                <tr key={index}>
-                  <th>{index + 1}</th>
-                  <td>{item.number}</td>
-                  <td>{item.answer}</td>
-                  <td>
-                    {item.isCorrect ? (
-                      <FiCheckCircle className="text-success" />
-                    ) : (
-                      <FiXCircle className="text-error" />
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th>Plate</th>
+                  <th>Correct Number</th>
+                  <th>Your Answer</th>
+                  <th>Result</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {history.map((item, index) => (
+                  <tr key={index}>
+                    <th>{index + 1}</th>
+                    <td>{item.number}</td>
+                    <td>{item.answer}</td>
+                    <td>
+                      {item.isCorrect ? (
+                        <FiCheckCircle className="text-success" />
+                      ) : (
+                        <FiXCircle className="text-error" />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
@@ -148,7 +150,7 @@ function IshiharaGame() {
             Next Challenge <FiArrowRight />
           </button>
         </div>
-      </div>
+      </>
     );
   }
 

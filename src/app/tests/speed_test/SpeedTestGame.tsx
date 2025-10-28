@@ -83,34 +83,37 @@ function SpeedTestGame() {
     const bestSessionTime = Math.min(...results);
 
     return (
-      <div className="text-center my-10 md:my-12 max-w-md mx-auto">
-        <h2 className="text-2xl font-bold">Test Complete!</h2>
-        <p className="text-xl font-semibold mt-2 mb-4">
-          Your best time was {bestSessionTime}ms
-        </p>
+      <>
+        <div className="text-center my-10 md:my-12 max-w-md mx-auto">
+          <h2 className="text-2xl font-bold">Test Complete!</h2>
+          <p className="text-xl font-semibold mt-2 mb-4">
+            Your best time was {bestSessionTime}ms
+          </p>
 
-        <div role="alert" className={clsx("alert mb-4", feedback.className)}>
-          <feedback.icon className="text-2xl" />
-          <div>
-            <h3 className="font-bold">{feedback.title}</h3>
-            <div className="text-xs">{feedback.message}</div>
+          <div role="alert" className={clsx("alert mb-4", feedback.className)}>
+            <feedback.icon className="text-2xl" />
+            <div>
+              <h3 className="font-bold">{feedback.title}</h3>
+              <div className="text-xs">{feedback.message}</div>
+            </div>
+          </div>
+
+          <div className="stats stats-vertical shadow-lg">
+            {results.map((time, index) => (
+              <div className="stat" key={index}>
+                <div className="stat-title">Round {index + 1}</div>
+                <div
+                  className={clsx("stat-value", {
+                    "text-primary": time === bestSessionTime,
+                  })}
+                >
+                  {time}ms
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="stats stats-vertical shadow-lg">
-          {results.map((time, index) => (
-            <div className="stat" key={index}>
-              <div className="stat-title">Round {index + 1}</div>
-              <div
-                className={clsx("stat-value", {
-                  "text-primary": time === bestSessionTime,
-                })}
-              >
-                {time}ms
-              </div>
-            </div>
-          ))}
-        </div>
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
           <button className="btn btn-lg btn-outline" onClick={handleShare}>
             <FiShare2 />
@@ -127,7 +130,7 @@ function SpeedTestGame() {
             Next Challenge <FiArrowRight />
           </button>
         </div>
-      </div>
+      </>
     );
   }
 
