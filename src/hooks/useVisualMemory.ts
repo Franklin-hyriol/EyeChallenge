@@ -3,11 +3,10 @@
 import { useState, useCallback, useEffect } from 'react';
 import { type ShapeType } from '@/app/tests/visual_memory/Shape';
 
-const ALL_SHAPES: ShapeType[] = ['circle', 'square', 'triangle', 'star', 'diamond', 'hexagon'];
+const ALL_SHAPES: ShapeType[] = ['circle', 'square', 'triangle', 'star', 'diamond', 'hexagon', 'cross', 'pentagon', 'heart', 'oval'];
 const MEMORIZE_TIME = 1500;
 const RECALL_TIME = 5;
 const MAX_LEVEL = 15;
-const GRID_SIZE = 4;
 
 const successSound = typeof window !== 'undefined' ? new Audio('/true.mp3') : null;
 const failSound = typeof window !== 'undefined' ? new Audio('/false.mp3') : null;
@@ -25,8 +24,9 @@ function getRandomUniqueItems<T>(array: T[], count: number): T[] {
 export function useVisualMemory() {
   const [status, setStatus] = useState<'idle' | 'memorize' | 'recall' | 'result'>('idle');
   const [level, setLevel] = useState(1);
-  const [targetShape, setTargetShape] = useState<ShapeType | null>(null);
+  const [targetShapes, setTargetShapes] = useState<ShapeType[]>([]);
   const [gridShapes, setGridShapes] = useState<ShapeType[]>([]);
+  const [userSelection, setUserSelection] = useState<ShapeType[]>([]);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [bestScore, setBestScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(RECALL_TIME);
@@ -48,47 +48,65 @@ export function useVisualMemory() {
   const startLevel = useCallback((currentLevel: number) => {
     setFeedback(null);
     setTimeLeft(RECALL_TIME);
+    setUserSelection([]);
 
-    const [newTarget] = getRandomUniqueItems(ALL_SHAPES, 1);
-    setTargetShape(newTarget);
+    let numTargets = 1;
+    let gridSize = 4;
 
-    const otherShapes = ALL_SHAPES.filter(shape => shape !== newTarget);
-    const lures = getRandomUniqueItems(otherShapes, GRID_SIZE - 1);
-    const finalGrid = [...lures, newTarget].sort(() => Math.random() - 0.5);
+    if (currentLevel >= 5 && currentLevel < 10) {
+      numTargets = 2;
+      gridSize = 6;
+    } else if (currentLevel >= 10) {
+      numTargets = 3;
+      gridSize = 9;
+    }
+
+    const targets = getRandomUniqueItems(ALL_SHAPES, numTargets);
+    setTargetShapes(targets);
+
+    const otherShapes = ALL_SHAPES.filter(shape => !targets.includes(shape));
+    const lures = getRandomUniqueItems(otherShapes, gridSize - numTargets);
+    const finalGrid = [...lures, ...targets].sort(() => Math.random() - 0.5);
     setGridShapes(finalGrid);
 
     setStatus('memorize');
   }, []);
 
   const handleShapeClick = (shape: ShapeType) => {
-    if (status !== 'recall') return;
+    if (status !== 'recall' || userSelection.includes(shape)) return;
 
-    const isCorrect = shape === targetShape;
-    setFeedback(isCorrect ? 'correct' : 'incorrect');
+    const newSelection = [...userSelection, shape];
+    setUserSelection(newSelection);
 
-    if (isCorrect) {
-      successSound?.play();
-      const newLevel = level + 1;
-      if (newLevel > bestScore) setBestScore(newLevel);
+    // Check if the selection is complete
+    if (newSelection.length === targetShapes.length) {
+        const isCorrect = targetShapes.every(target => newSelection.includes(target));
+        setFeedback(isCorrect ? 'correct' : 'incorrect');
 
-      if (newLevel <= MAX_LEVEL) {
-        setTimeout(() => {
-          setLevel(newLevel);
-          setTimeout(() => startLevel(newLevel), 200); // 👈 sécurité visuelle
-        }, 1000);
-      } else {
-        setTimeout(endGame, 1000);
-      }
-    } else {
-      failSound?.play();
-      setTimeout(endGame, 1000);
+        if (isCorrect) {
+            successSound?.play();
+            const newLevel = level + 1;
+            if (newLevel > bestScore) setBestScore(newLevel);
+
+            if (newLevel <= MAX_LEVEL) {
+                setTimeout(() => {
+                    setLevel(newLevel);
+                    setTimeout(() => startLevel(newLevel), 200);
+                }, 1000);
+            } else {
+                setTimeout(endGame, 1000);
+            }
+        } else {
+            failSound?.play();
+            setTimeout(endGame, 1000);
+        }
     }
   };
 
   useEffect(() => {
     if (status === 'memorize') {
       const timer = setTimeout(() => {
-        if (targetShape) setStatus('recall');
+        if (targetShapes.length > 0) setStatus('recall');
       }, MEMORIZE_TIME);
       return () => clearTimeout(timer);
     }
@@ -106,7 +124,7 @@ export function useVisualMemory() {
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [status, targetShape, endGame]);
+  }, [status, targetShapes, endGame]);
 
   const startGame = () => {
     setLevel(1);
@@ -117,8 +135,9 @@ export function useVisualMemory() {
     status,
     level,
     MAX_LEVEL,
-    targetShape,
+    targetShapes,
     gridShapes,
+    userSelection,
     feedback,
     bestScore,
     timeLeft,
