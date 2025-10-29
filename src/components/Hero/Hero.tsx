@@ -5,7 +5,7 @@ import AdSlot from "../AdSlot/AdSlot";
 function Hero() {
   return (
     <section className="main-container">
-      <div className="py-10 sm:py-18 flex justify-between gap-12">
+      <div className="py-10 sm:py-18 flex flex-col lg:flex-row justify-between gap-12">
         <div className="flex-1 flex flex-col gap-6 text-center lg:text-left items-center lg:items-start">
           <h1 className="max-w-md text-4xl font-black leading-tight tracking-[-0.033em] sm:text-5xl md:text-6xl">
             Challenge your vision with fun mini-tests 👁️

@@ -1,5 +1,5 @@
 const Why = () => (
-  <section className="py-10 sm:py-18">
+  <section className="py-10 sm:py-18 main-container">
     <div className="max-w-3xl mx-auto text-center">
       <h2 className="text-3xl font-bold leading-tight tracking-[-0.015em] pb-6">
         Why test your vision ?
