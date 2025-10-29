@@ -3,6 +3,7 @@ import HeadingPage from "@/components/HeadingPage/HeadingPage";
 import Info from "@/components/Info/Info";
 import NightVisionGame from "./NightVisionGame";
 import { Metadata } from "next";
+import Suggestion from "@/components/Suggestion/Suggestion";
 
 export const metadata: Metadata = {
   title: "Night Vision Test - How Well Do You See in the Dark? | EyeChallenge",
@@ -12,21 +13,24 @@ export const metadata: Metadata = {
 
 function NightVisionPage() {
   return (
-    <section className="py-10 sm:py-18 main-container flex flex-col items-center">
-      <HeadingPage
-        title="Night Vision Test"
-        description="This test evaluates your ability to perceive low-contrast stimuli in a dark environment, a key aspect of night vision."
-      />
+    <>
+      <section className="py-10 sm:py-18 main-container flex flex-col items-center">
+        <HeadingPage
+          title="Night Vision Test"
+          description="This test evaluates your ability to perceive low-contrast stimuli in a dark environment, a key aspect of night vision."
+        />
 
-      <NightVisionGame />
+        <NightVisionGame />
 
-      <Info
-        title="Did you know?"
-        description="Human eyes can take up to 30-45 minutes to fully adapt to darkness. This process, called dark adaptation, significantly increases your sensitivity to light."
-      />
+        <Info
+          title="Did you know?"
+          description="Human eyes can take up to 30-45 minutes to fully adapt to darkness. This process, called dark adaptation, significantly increases your sensitivity to light."
+        />
 
+        <Suggestion />
+      </section>
       <AdSlot />
-    </section>
+    </>
   );
 }
 

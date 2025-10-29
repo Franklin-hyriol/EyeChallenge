@@ -2,8 +2,7 @@ import * as React from "react";
 const SvgHeroImage = (props: React.JSX.IntrinsicElements["svg"]) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={615.81}
-    height={496.342}
+    viewBox="0 0 615.81 496.342"
     {...props}
   >
     <path

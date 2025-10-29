@@ -11,7 +11,7 @@ const Footer = () => (
         >
           <Image
             src="/EyeChallenge.svg"
-            alt="EyeChallenge"
+            alt="EyeChallenge Logo footer"
             width={25}
             height={25}
           />
