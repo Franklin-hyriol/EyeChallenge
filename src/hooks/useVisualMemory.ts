@@ -5,7 +5,7 @@ import { type ShapeType } from '@/app/tests/visual_memory/Shape';
 
 const ALL_SHAPES: ShapeType[] = ['circle', 'square', 'triangle', 'star', 'diamond', 'hexagon', 'cross', 'pentagon', 'heart', 'oval'];
 const MEMORIZE_TIME = 1500;
-const RECALL_TIME = 5;
+const RECALL_TIME = 5000;
 const MAX_LEVEL = 15;
 
 const successSound = typeof window !== 'undefined' ? new Audio('/true.mp3') : null;
@@ -50,16 +50,8 @@ export function useVisualMemory() {
     setTimeLeft(RECALL_TIME);
     setUserSelection([]);
 
-    let numTargets = 1;
-    let gridSize = 4;
-
-    if (currentLevel >= 5 && currentLevel < 10) {
-      numTargets = 2;
-      gridSize = 6;
-    } else if (currentLevel >= 10) {
-      numTargets = 3;
-      gridSize = 9;
-    }
+    const numTargets = Math.floor((currentLevel - 1) / 3) + 1;
+    const gridSize = Math.min(numTargets * 2 + 2, 12);
 
     const targets = getRandomUniqueItems(ALL_SHAPES, numTargets);
     setTargetShapes(targets);

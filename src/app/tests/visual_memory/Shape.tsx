@@ -33,24 +33,24 @@ export default function Shape({ type, className }: ShapeProps) {
         return <div className={clsx("w-full h-full bg-current", className)} />;
 
       case "triangle":
-        // Triangle vers le haut
         return (
-          <div
-            className={clsx(
-              "w-0 h-0 border-l-30 border-l-transparent border-r-30 border-r-transparent border-b-50 border-b-current",
-              className
-            )}
-          />
+          <svg
+            viewBox="0 0 100 100"
+            className={clsx("w-full h-full", className)}
+            fill="currentColor"
+          >
+            <polygon points="50,0 100,100 0,100" />
+          </svg>
         );
 
       case "star":
         return (
           <svg
-            viewBox="0 0 24 24"
+            viewBox="0 0 100 100"
             className={clsx("w-full h-full", className)}
             fill="currentColor"
           >
-            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+            <polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" />
           </svg>
         );
 
