@@ -3,6 +3,7 @@ import HeadingPage from "@/components/HeadingPage/HeadingPage";
 import Info from "@/components/Info/Info";
 import PrecisionPerceptionGame from "./PrecisionPerceptionGame";
 import { Metadata } from "next";
+import Suggestion from "@/components/Suggestion/Suggestion";
 
 export const metadata: Metadata = {
   title: "Precision Perception Test - Spot the Difference | EyeChallenge",
@@ -12,21 +13,24 @@ export const metadata: Metadata = {
 
 function PrecisionPerceptionPage() {
   return (
-    <section className="py-10 sm:py-18 main-container flex flex-col items-center">
-      <HeadingPage
-        title="Precision Perception Test"
-        description="This test evaluates your ability to detect subtle differences in size between similar objects."
-      />
+    <>
+      <section className="py-10 sm:py-18 main-container flex flex-col items-center">
+        <HeadingPage
+          title="Precision Perception Test"
+          description="This test evaluates your ability to detect subtle differences in size between similar objects."
+        />
 
-      <PrecisionPerceptionGame />
+        <PrecisionPerceptionGame />
 
-      <Info
-        title="Did you know?"
-        description="The human eye can distinguish between two objects that differ in size by as little as 1-2% under optimal conditions."
-      />
+        <Info
+          title="Did you know?"
+          description="The human eye can distinguish between two objects that differ in size by as little as 1-2% under optimal conditions."
+        />
 
+        <Suggestion />
+      </section>
       <AdSlot />
-    </section>
+    </>
   );
 }
 
