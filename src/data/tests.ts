@@ -30,19 +30,19 @@ const tests = [
     link: "tests/precision_perception",
   },
   {
-    image: "/shell_game.png",
+    image: "/shell_game.jpg",
     title: "Shell game (Visual tracking)",
     description: "Follow the ball as the cups move — can your eyes keep up?",
     link: "tests/shell_game",
   },
   {
-    image: "/snellen.png", // Using a relevant existing image
+    image: "/acuity_ring.png", 
     title: "Acuity Ring Test",
     description: "Identify the direction of the gap in the ring.",
     link: "tests/acuity_ring",
   },
   {
-    image: "/memory_shape.png",
+    image: "/memory_shape.jpg",
     title: "Visual Memory",
     description: "Remember which shape was shown?",
     link: "tests/visual_memory",
