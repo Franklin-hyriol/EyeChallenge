@@ -41,6 +41,12 @@ const tests = [
     description: "Identify the direction of the gap in the ring.",
     link: "tests/acuity_ring",
   },
+  {
+    image: "/memory_shape.png",
+    title: "Visual Memory",
+    description: "Remember which shape was shown?",
+    link: "tests/visual_memory",
+  },
 ];
 
 export default tests;
