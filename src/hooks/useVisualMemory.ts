@@ -45,8 +45,8 @@ export function useVisualMemory() {
     setFeedback(null);
     setMemorizeTimeLeft(MEMORIZE_DURATION);
 
-    const numTargets = Math.min(Math.floor(currentLevel / 2) + 1, 5);
-    const gridSize = Math.min(numTargets * 2 + 2, 12);
+    const numTargets = Math.min(Math.floor(currentLevel / 2) + 1, ALL_SHAPES.length - 1); // Ensure numTargets leaves at least one non-target
+    const gridSize = Math.min(numTargets * 2 + 2, ALL_SHAPES.length); // Grid size should not exceed total available shapes
 
     const targets = getRandomSubset(ALL_SHAPES, numTargets);
     setShapesToMemorize(targets);

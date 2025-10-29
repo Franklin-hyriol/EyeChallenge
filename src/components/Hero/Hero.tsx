@@ -21,7 +21,7 @@ function Hero() {
           </Link>
         </div>
 
-        <div className="flex-1">
+        <div className="flex-1 w-full h-auto">
           <SvgHeroImage />
         </div>
       </div>

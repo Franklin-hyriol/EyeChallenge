@@ -13,7 +13,7 @@ const Header = () => {
           >
             <Image
               src="/EyeChallenge.svg"
-              alt="EyeChallenge"
+              alt="EyeChallenge Logo header"
               width={32}
               height={32}
             />

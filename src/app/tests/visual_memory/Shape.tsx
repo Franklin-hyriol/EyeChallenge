@@ -17,7 +17,7 @@ export default function Shape({ type, className }: ShapeProps) {
       case 'square':
         return <div className={clsx("w-full h-full", className)}></div>;
       case 'triangle':
-        return <div className={clsx("w-0 h-0 border-l-50 border-l-transparent border-b-100 border-r-50 border-r-transparent", className)} style={{borderColor: 'transparent transparent currentColor transparent'}}></div>;
+        return <div className={clsx("w-0 h-0 border-l-50 border-l-transparent border-b-100 border-r-50 border-r-transparent border-b-current", className)}></div>;
       case 'star':
         return (
           <svg viewBox="0 0 24 24" className={clsx("w-full h-full", className)} fill="currentColor">
