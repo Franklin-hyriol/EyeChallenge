@@ -6,7 +6,7 @@ import { useNextChallenge } from '@/hooks/useNextChallenge';
 import { useVisualMemory } from '@/hooks/useVisualMemory';
 import Shape from './Shape';
 import { TbReload } from 'react-icons/tb';
-import { FiShare2, FiAward, FiEye, FiCheckCircle, FiXCircle, FiArrowRight as FiNext } from 'react-icons/fi';
+import { FiShare2, FiAward, FiEye, FiArrowRight as FiNext } from 'react-icons/fi';
 import clsx from 'clsx';
 import Progress from '@/components/Progress/Progress';
 
@@ -15,15 +15,16 @@ export default function VisualMemoryGame() {
     status,
     level,
     MAX_LEVEL,
-    shapesToMemorize,
+    targetShape,
     gridShapes,
-    userSelection,
     feedback,
     bestScore,
-    memorizeTimeLeft,
+    timeLeft,
     startGame,
     handleShapeClick,
   } = useVisualMemory();
+
+  console.log('[RENDER]', { status, targetShape, gridShapes });
 
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -36,13 +37,13 @@ export default function VisualMemoryGame() {
   }, [status]);
 
   const handleShare = async () => {
-    const text = `I reached level ${level} on the Visual Memory Test! Can you beat my score? 👀`;
+    const text = `I reached level ${level - 1} on the Visual Memory Test! Can you beat my score? 👀`;
     // Sharing logic here...
   };
 
   const getStatusMessage = () => {
-    if (status === 'memorize') return `Memorize ${shapesToMemorize.length} shape(s)!`;
-    if (status === 'recall') return `Select the ${shapesToMemorize.length} shape(s) you saw.`;
+    if (status === 'memorize') return `Memorize the shape!`;
+    if (status === 'recall') return `Which shape did you see?`;
     return '';
   };
 
@@ -77,12 +78,17 @@ export default function VisualMemoryGame() {
 
   return (
     <div ref={gameAreaRef} className="w-full flex flex-col items-center pt-10">
-      {status === 'memorize' && <Progress value={memorizeTimeLeft} maxValue={2} />}
+      {status === 'recall' && <Progress value={timeLeft} maxValue={5} />}
 
       {/* Stats Header */}
       <div className="w-full mt-10 md:mt-12 max-w-4xl">
         <div className="flex items-center justify-center gap-6 sm:gap-10 flex-wrap">
           <div className="text-center flex flex-col"><span className="text-slate-500 dark:text-slate-400 text-sm font-medium">LEVEL</span><span className="text-4xl font-bold leading-normal">{level}</span></div>
+          <div className="w-px h-16 bg-slate-500 dark:bg-slate-400 hidden sm:block"></div>
+          <div className="text-center flex flex-col">
+            <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">TIME LEFT</span>
+            <span className={clsx("text-4xl font-bold leading-normal text-primary", { "text-red-500 animate-pulse": timeLeft <= 2 && status === 'recall' })}>{timeLeft}s</span>
+          </div>
           <div className="w-px h-16 bg-slate-500 dark:bg-slate-400 hidden sm:block"></div>
           <div className="text-center flex flex-col"><span className="text-slate-500 dark:text-slate-400 text-sm font-medium">BEST SCORE</span><span className="text-4xl font-bold leading-normal">{bestScore}</span></div>
         </div>
@@ -94,26 +100,24 @@ export default function VisualMemoryGame() {
 
       {/* Game Arena */}
       <div className="w-full flex items-center justify-center my-10 md:my-12 min-h-[300px]">
-        {status === 'memorize' && (
-          <div className="flex flex-wrap justify-center items-center gap-4 animate-in fade-in">
-            {shapesToMemorize.map(shape => <Shape key={shape} type={shape} className="text-primary" />)}
+        {status === 'memorize' && targetShape && (
+          <div className="animate-in fade-in">
+            <Shape type={targetShape} className="text-primary" />
           </div>
         )}
         {status === 'recall' && (
-          <div className="grid grid-cols-3 gap-4 animate-in fade-in">
-            {gridShapes.map(shape => (
+          <div className="grid grid-cols-2 gap-4 animate-in fade-in">
+            {gridShapes.map((shape, index) => (
               <button
-                key={shape}
+                key={`${shape}-${index}`}
                 onClick={() => handleShapeClick(shape)}
-                disabled={userSelection.includes(shape)}
+                disabled={feedback !== null}
                 className={clsx(
                   "p-4 rounded-lg border-2 transition-all",
-                  {
-                    'bg-primary/20 border-primary': userSelection.includes(shape),
-                    'border-transparent hover:border-primary/50': !userSelection.includes(shape),
-                    'border-green-500 bg-green-500/20': feedback === 'correct' && shapesToMemorize.includes(shape),
-                    'border-red-500 bg-red-500/20': feedback === 'incorrect' && userSelection.includes(shape) && !shapesToMemorize.includes(shape),
-                  }
+                  feedback === null && "border-transparent hover:border-primary/50",
+                  feedback === 'correct' && shape === targetShape && "border-green-500 bg-green-500/20",
+                  feedback === 'incorrect' && shape === targetShape && "border-green-500 bg-green-500/20", // Show correct one on fail
+                  feedback === 'incorrect' && shape !== targetShape && "border-red-500 bg-red-500/20" // Only for the selected wrong one
                 )}
               >
                 <Shape type={shape} className="text-base-content" />
