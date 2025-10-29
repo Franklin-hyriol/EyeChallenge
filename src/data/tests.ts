@@ -35,6 +35,12 @@ const tests = [
     description: "Follow the ball as the cups move — can your eyes keep up?",
     link: "tests/shell_game",
   },
+  {
+    image: "/snellen.png", // Using a relevant existing image
+    title: "Acuity Ring Test",
+    description: "Identify the direction of the gap in the ring.",
+    link: "tests/acuity_ring",
+  },
 ];
 
 export default tests;
