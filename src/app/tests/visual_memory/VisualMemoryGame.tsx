@@ -30,7 +30,6 @@ export default function VisualMemoryGame() {
     handleShapeClick,
   } = useVisualMemory();
 
-  console.log("[RENDER]", { status, targetShapes, gridShapes });
 
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
