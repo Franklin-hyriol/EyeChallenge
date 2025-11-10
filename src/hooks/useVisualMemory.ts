@@ -5,7 +5,7 @@ import { type ShapeType } from '@/app/tests/visual_memory/Shape';
 
 const ALL_SHAPES: ShapeType[] = ['circle', 'square', 'triangle', 'star', 'diamond', 'hexagon', 'cross', 'pentagon', 'heart', 'oval'];
 const MEMORIZE_TIME = 1500;
-const RECALL_TIME = 5000;
+const RECALL_TIME = 5;
 const MAX_LEVEL = 15;
 
 const successSound = typeof window !== 'undefined' ? new Audio('/true.mp3') : null;
