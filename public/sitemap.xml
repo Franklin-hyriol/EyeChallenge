@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.example.com/</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests/color_test</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests/color_test</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests/speed_test</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests/speed_test</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests/night_vision</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests/night_vision</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests/ishihara</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests/ishihara</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests/precision_perception</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests/precision_perception</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests/shell_game</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests/shell_game</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests/acuity_ring</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests/acuity_ring</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.example.com/tests/visual_memory</loc>
-    <lastmod>2025-10-28</lastmod>
+    <loc>https://www.eyechallenge.fun/tests/visual_memory</loc>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

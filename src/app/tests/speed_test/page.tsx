@@ -3,6 +3,13 @@ import HeadingPage from "@/components/HeadingPage/HeadingPage";
 import Info from "@/components/Info/Info";
 import SpeedTestGame from "./SpeedTestGame";
 import Suggestion from "@/components/Suggestion/Suggestion";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Reaction Speed Test - Check Your Reflexes Online | EyeChallenge",
+  description:
+    "Test your reaction time with our online speed test. Click the target as soon as it appears and see how fast your reflexes are. A fun way to measure your visual processing speed.",
+};
 
 function SpeedTest() {
   return (

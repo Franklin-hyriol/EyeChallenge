@@ -19,7 +19,7 @@ export default function NotFound() {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 w-full pt-4 max-w-md">
+      <div className="flex flex-col sm:flex-row gap-3 w-full pt-4 max-w-md justify-center">
         <Link href="/" className="btn btn-primary btn-lg">
           Return Home
         </Link>
