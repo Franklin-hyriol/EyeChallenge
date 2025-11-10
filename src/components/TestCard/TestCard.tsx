@@ -21,7 +21,7 @@ function TestCard({ image, title, description, link }: TestCardProps) {
           {description}
         </p>
       </div>
-      <Link className="btn btn-primary" href={link}>Take the test</Link>
+      <Link className="btn btn-primary" href={"/"+link}>Take the test</Link>
     </div>
   );
 }
