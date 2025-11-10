@@ -1,2 +1,6 @@
+# See https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://www.eyechallenge.fun/sitemap.xml
+Sitemap: https://eyechallenge.fun/sitemap.xml
