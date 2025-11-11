@@ -14,6 +14,7 @@ import {
 } from "react-icons/fi";
 import clsx from "clsx";
 import Progress from "@/components/Progress/Progress";
+import { useShare } from "@/hooks/useShare";
 
 export default function VisualMemoryGame() {
   const {
@@ -30,10 +31,19 @@ export default function VisualMemoryGame() {
     handleShapeClick,
   } = useVisualMemory();
 
-
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const { shareText, handleShare } = useShare(
+    `I reached level ${
+      level - 1
+    } on the Visual Memory Test! Can you beat my score? 👀`,
+    "EyeChallenge - Visual Memory Test"
+  );
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   useEffect(() => {
     if (status !== "idle" && gameAreaRef.current) {
@@ -43,13 +53,6 @@ export default function VisualMemoryGame() {
       });
     }
   }, [status]);
-
-  const handleShare = async () => {
-    const text = `I reached level ${
-      level - 1
-    } on the Visual Memory Test! Can you beat my score? 👀`;
-    // Sharing logic here...
-  };
 
   const getStatusMessage = () => {
     if (status === "memorize")
@@ -95,7 +98,7 @@ export default function VisualMemoryGame() {
         </div>
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
           <button className="btn btn-lg btn-outline" onClick={handleShare}>
-            <FiShare2 /> Share
+            <FiShare2 /> {shareText}
           </button>
           <button className="btn btn-lg btn-primary" onClick={startGame}>
             <TbReload /> Play Again
@@ -173,7 +176,7 @@ export default function VisualMemoryGame() {
           <div
             className={clsx("grid gap-4 animate-in fade-in", {
               "grid-cols-2 w-64": gridShapes.length === 4,
-              "grid-cols-3 w-96": (gridShapes.length >= 6),
+              "grid-cols-3 w-96": gridShapes.length >= 6,
             })}
           >
             {gridShapes.map((shape, index) => (
@@ -181,18 +184,21 @@ export default function VisualMemoryGame() {
                 key={`${shape}-${index}`}
                 onClick={() => handleShapeClick(shape)}
                 disabled={userSelection.includes(shape) || feedback !== null}
-                className={clsx("p-4 rounded-lg border-2 transition-all w-fit flex items-center justify-center", {
-                  "bg-green-500/20 border-green-500":
-                    userSelection.includes(shape),
-                  "border-transparent hover:border-primary/50":
-                    !userSelection.includes(shape),
-                  "border-green-500 bg-green-500/20":
-                    feedback === "correct" && targetShapes.includes(shape),
-                  "border-red-500 bg-red-500/20":
-                    feedback === "incorrect" &&
-                    userSelection.includes(shape) &&
-                    !targetShapes.includes(shape),
-                })}
+                className={clsx(
+                  "p-4 rounded-lg border-2 transition-all w-fit flex items-center justify-center",
+                  {
+                    "bg-green-500/20 border-green-500":
+                      userSelection.includes(shape),
+                    "border-transparent hover:border-primary/50":
+                      !userSelection.includes(shape),
+                    "border-green-500 bg-green-500/20":
+                      feedback === "correct" && targetShapes.includes(shape),
+                    "border-red-500 bg-red-500/20":
+                      feedback === "incorrect" &&
+                      userSelection.includes(shape) &&
+                      !targetShapes.includes(shape),
+                  }
+                )}
               >
                 <Shape type={shape} className="text-base-content" />
               </button>

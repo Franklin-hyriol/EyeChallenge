@@ -4,8 +4,8 @@ import ToggleTheme from "../ToggleTheme/ToggleTheme";
 
 const Header = () => {
   return (
-    <header className="main-container mt-5 sticky top-0 z-50">
-      <div className="navbar bg-base-100 border-b border-base-300">
+    <header className="sticky top-0 z-50 shadow-sm">
+      <div className="navbar bg-base-100 main-container">
         <div className="flex-none">
           <Link
             href="/"

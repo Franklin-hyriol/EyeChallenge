@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 const Footer = () => (
-  <footer className="main-container">
-    <div className="flex flex-col md:flex-row justify-between items-center gap-6 border-t border-base-300 py-8">
+  <footer className="shadow-sm">
+    <div className="main-container flex flex-col md:flex-row justify-between items-center gap-6 py-4 ">
       <div className="flex items-center gap-2">
         <Link
           href="/"

@@ -9,9 +9,9 @@ export const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.eyechallenge.fun"),
-  title: "EyeChallenge - Online Vision & Color Perception Tests",
+  title: "EyeChallenge – Test Your Eyes & Mind Online",
   description:
-    "EyeChallenge is an online platform for vision and color perception tests. It provides a range of tests to assess visual acuity, color vision, and other aspects of visual perception.",
+    "Put your eyes and brain to the test! EyeChallenge offers fun and accurate online tests to measure your vision, focus, and perception skills.",
   alternates: {
     canonical: "https://www.eyechallenge.fun",
     languages: {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "EyeChallenge - Online Vision & Color Perception Tests",
+    title: "EyeChallenge – Test Your Eyes & Mind Online",
     description:
       "Test your vision and color perception with our online challenges.",
     url: "https://www.eyechallenge.fun",
