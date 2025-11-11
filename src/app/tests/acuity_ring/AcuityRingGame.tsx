@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useNextChallenge } from '@/hooks/useNextChallenge';
 import { useAcuityRing, GapDirection } from '@/hooks/useAcuityRing';
@@ -9,6 +9,7 @@ import { TbReload } from 'react-icons/tb';
 import { FiShare2, FiAward, FiEye, FiCheckCircle, FiXCircle, FiArrowRight as FiNext } from 'react-icons/fi';
 import clsx from 'clsx';
 import Progress from '@/components/Progress/Progress';
+import { useShare } from '@/hooks/useShare';
 
 // Helper function to calculate the SVG path for a pie slice
 function getPieSlicePath(cx: number, cy: number, radius: number, startAngle: number, endAngle: number): string {
@@ -52,17 +53,16 @@ export default function AcuityRingGame() {
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const { shareText, handleShare } = useShare(
+    `I reached level ${level - 1} on the EyeChallenge Acuity Test! Can you beat my score? 👀`,
+    "EyeChallenge - Acuity Test"
+  );
 
   useEffect(() => {
     if (status === 'playing' && gameAreaRef.current) {
       gameAreaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [status]);
-
-  const handleShare = async () => {
-    const text = `I reached level ${level - 1} on the EyeChallenge Acuity Test! Can you beat my score? 👀`;
-    // Sharing logic here...
-  };
 
   if (status === 'idle') {
     return (
@@ -88,7 +88,7 @@ export default function AcuityRingGame() {
         </div>
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
           <button className="btn btn-lg btn-outline" onClick={handleShare}>
-            <FiShare2 /> Share
+            <FiShare2 /> {shareText}
           </button>
           <button className="btn btn-lg btn-primary" onClick={startGame}>
             <TbReload /> Play Again

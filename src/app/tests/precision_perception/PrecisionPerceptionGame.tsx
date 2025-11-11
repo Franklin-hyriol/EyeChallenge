@@ -1,7 +1,7 @@
 "use client";
 
 import { usePrecisionPerception } from "@/hooks/usePrecisionPerception";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { TbReload } from "react-icons/tb";
 import {
   FiShare2,
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useNextChallenge } from "@/hooks/useNextChallenge";
 import clsx from "clsx";
 import Progress from "@/components/Progress/Progress";
+import { useShare } from "@/hooks/useShare";
 
 function PrecisionPerceptionGame() {
   const {
@@ -34,28 +35,21 @@ function PrecisionPerceptionGame() {
     goToIdle,
   } = usePrecisionPerception();
 
-  const [shareText, setShareText] = useState("Share my score");
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const { shareText, handleShare } = useShare(
+    `I scored ${score}/${ROUNDS} on the EyeChallenge Precision Perception test! Can you do better? 👀`,
+    "EyeChallenge - Precision Perception Test"
+  );
 
   useEffect(() => {
     if (status === "playing" && gameAreaRef.current) {
-      gameAreaRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      gameAreaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [status]);
 
-  const handleShare = async () => {
-    const text = `I scored ${score}/${ROUNDS} on the EyeChallenge Precision Perception test! Can you do better? 👀`;
-    const url = window.location.href;
-    if (navigator.share) {
-      await navigator.share({ title: "EyeChallenge - Precision Perception Test", text, url });
-    } else {
-      await navigator.clipboard.writeText(`${text}\n${url}`);
-      setShareText("Copied!");
-      setTimeout(() => setShareText("Share my score"), 2000);
-    }
-  };
+
 
   if (status === "idle") {
     return (
