@@ -17,6 +17,7 @@ import clsx from "clsx";
 import Progress from "@/components/Progress/Progress";
 import { useRouter } from "next/navigation";
 import { useNextChallenge } from "@/hooks/useNextChallenge";
+import { useShare } from "@/hooks/useShare";
 
 function IshiharaGame() {
   const {
@@ -35,10 +36,13 @@ function IshiharaGame() {
   } = useIshihara();
 
   const [inputValue, setInputValue] = useState("");
-  const [shareText, setShareText] = useState("Share my score");
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const { shareText, handleShare } = useShare(
+    `I scored ${correctAnswers}/${ROUNDS} on the EyeChallenge Ishihara test! Can you do better? 👀`,
+    "EyeChallenge - Ishihara Test"
+  );
 
   useEffect(() => {
     if (status === "playing" && gameAreaRef.current) {
@@ -67,17 +71,7 @@ function IshiharaGame() {
     setInputValue("");
   };
 
-  const handleShare = async (score: number) => {
-    const text = `I scored ${score}/${ROUNDS} on the EyeChallenge Ishihara test! Can you do better? 👀`;
-    const url = window.location.href;
-    if (navigator.share) {
-      await navigator.share({ title: "EyeChallenge - Ishihara Test", text, url });
-    } else {
-      await navigator.clipboard.writeText(`${text}\n${url}`);
-      setShareText("Copied!");
-      setTimeout(() => setShareText("Share my score"), 2000);
-    }
-  };
+
 
   if (status === "idle") {
     return (
@@ -137,7 +131,7 @@ function IshiharaGame() {
         </div>
 
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
-          <button className="btn btn-lg btn-outline" onClick={() => handleShare(correctAnswers)}>
+          <button className="btn btn-lg btn-outline" onClick={handleShare}>
             <FiShare2 /> {shareText}
           </button>
           <button className="btn btn-lg btn-primary" onClick={goToIdle}>

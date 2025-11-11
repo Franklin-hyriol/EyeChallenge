@@ -14,6 +14,7 @@ import {
 } from "react-icons/fi";
 import clsx from "clsx";
 import Progress from "@/components/Progress/Progress";
+import { useShare } from "@/hooks/useShare";
 
 export default function VisualMemoryGame() {
   const {
@@ -34,6 +35,10 @@ export default function VisualMemoryGame() {
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const { shareText, handleShare } = useShare(
+    `I reached level ${level - 1} on the Visual Memory Test! Can you beat my score? 👀`,
+    "EyeChallenge - Visual Memory Test"
+  );
 
   useEffect(() => {
     if (status !== "idle" && gameAreaRef.current) {
@@ -44,12 +49,7 @@ export default function VisualMemoryGame() {
     }
   }, [status]);
 
-  const handleShare = async () => {
-    const text = `I reached level ${
-      level - 1
-    } on the Visual Memory Test! Can you beat my score? 👀`;
-    // Sharing logic here...
-  };
+
 
   const getStatusMessage = () => {
     if (status === "memorize")
@@ -95,7 +95,7 @@ export default function VisualMemoryGame() {
         </div>
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
           <button className="btn btn-lg btn-outline" onClick={handleShare}>
-            <FiShare2 /> Share
+            <FiShare2 /> {shareText}
           </button>
           <button className="btn btn-lg btn-primary" onClick={startGame}>
             <TbReload /> Play Again

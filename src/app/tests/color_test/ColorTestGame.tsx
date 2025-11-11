@@ -17,6 +17,7 @@ import {
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useNextChallenge } from "@/hooks/useNextChallenge";
+import { useShare } from "@/hooks/useShare";
 
 export default function ColorTestGame() {
   const {
@@ -31,10 +32,13 @@ export default function ColorTestGame() {
     restartGame,
   } = useColorTest();
 
-  const [shareText, setShareText] = useState("Share my score");
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const { shareText, handleShare } = useShare(
+    `I reached level ${level - 1} on the EyeChallenge color sensitivity test! Can you do better? 👀`,
+    "EyeChallenge - Color Test"
+  );
 
   const gridCols = Math.ceil(Math.sqrt(colors.length));
 
@@ -48,36 +52,7 @@ export default function ColorTestGame() {
     }
   }, [status]);
 
-  const handleShare = async () => {
-    const score = level - 1;
-    const text = `I reached level ${score} on the EyeChallenge color sensitivity test! Can you do better? 👀`;
-    const url = window.location.href;
 
-    const shareData = {
-      title: "EyeChallenge - Color Test",
-      text: text,
-      url: url,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (err) {
-        console.error("Share error:", err);
-      }
-    } else {
-      // Fallback for browsers that don't support Web Share API
-      try {
-        await navigator.clipboard.writeText(`${text}\n${url}`);
-        setShareText("Copied!");
-        setTimeout(() => {
-          setShareText("Share my score");
-        }, 2000);
-      } catch (err) {
-        console.error("Copy error:", err);
-      }
-    }
-  };
 
   if (status === "idle") {
     return (

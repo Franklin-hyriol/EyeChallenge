@@ -11,9 +11,10 @@ import {
 import { RiTimerFlashLine } from "react-icons/ri";
 import { TbReload } from "react-icons/tb";
 import clsx from "clsx";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useNextChallenge } from "@/hooks/useNextChallenge";
+import { useShare } from "@/hooks/useShare";
 
 function SpeedTestGame() {
   const {
@@ -27,10 +28,14 @@ function SpeedTestGame() {
     handleTargetClick,
   } = useSpeedTest();
 
-  const [shareText, setShareText] = useState("Share my score");
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const averageTime = status === "result" ? Math.round(results.reduce((a, b) => a + b, 0) / results.length) : 0;
+  const { shareText, handleShare } = useShare(
+    `My average reaction time is ${averageTime}ms on the EyeChallenge speed test! Can you do better? 👀`,
+    "EyeChallenge - Speed Test"
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -42,33 +47,7 @@ function SpeedTestGame() {
     }
   }, [status]);
 
-  const lastTime = results.length > 0 ? results[results.length - 1] : null;
-  const averageTime = status === "result" ? Math.round(results.reduce((a, b) => a + b, 0) / results.length) : null;
-
-  const handleShare = async () => {
-    if (!averageTime) return;
-
-    const text = `My average reaction time is ${averageTime}ms on the EyeChallenge speed test! Can you do better? 👀`;
-    const url = window.location.href;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "EyeChallenge - Speed Test", text, url });
-      } catch (err) {
-        console.error("Share error:", err);
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(`${text}\n${url}`);
-        setShareText("Copied!");
-        setTimeout(() => setShareText("Share my score"), 2000);
-      } catch (err) {
-        console.error("Copy error:", err);
-      }
-    }
-  };
-
-  if (status === "idle") {
+  const lastTime = results.length > 0 ? results[results.length - 1] : null;  if (status === "idle") {
     return (
       <div className="flex-1 flex flex-col items-center justify-center my-10 md:my-12">
         <button className="btn btn-lg btn-primary" onClick={startGame}>

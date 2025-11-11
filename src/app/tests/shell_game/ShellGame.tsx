@@ -8,6 +8,7 @@ import { TbReload } from 'react-icons/tb';
 import { FiShare2, FiCheckCircle, FiAward, FiEye, FiArrowRight } from 'react-icons/fi';
 import clsx from 'clsx';
 import Progress from '@/components/Progress/Progress';
+import { useShare } from '@/hooks/useShare';
 
 const SELECTION_TIME = 5; // Must match the value in the hook
 
@@ -26,28 +27,19 @@ export default function ShellGame() {
   } = useShellGame();
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [shareText, setShareText] = useState('Share my score');
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const { shareText, handleShare } = useShare(
+    `I scored ${score}/${ROUNDS} in the EyeChallenge Circle Tracking game! Can you beat my score? 👀`,
+    "EyeChallenge - Circle Tracking"
+  );
 
   useEffect(() => {
     if (status !== 'idle' && status !== 'result' && gameAreaRef.current) {
       gameAreaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [status]);
-
-  const handleShare = async () => {
-    const text = `I scored ${score}/${ROUNDS} in the EyeChallenge Circle Tracking game! Can you beat my score? 👀`;
-    const url = window.location.href;
-    if (navigator.share) {
-      await navigator.share({ title: 'EyeChallenge - Circle Tracking', text, url });
-    } else {
-      await navigator.clipboard.writeText(`${text}\n${url}`);
-      setShareText('Copied!');
-      setTimeout(() => setShareText('Share my score'), 2000);
-    }
-  };
 
   const getFeedback = (finalScore: number) => {
     if (finalScore === ROUNDS) return { title: 'Perfect!', message: 'Your tracking skills are flawless!', icon: FiAward, className: 'alert-success' };

@@ -14,6 +14,7 @@ import {
 } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useNextChallenge } from "@/hooks/useNextChallenge";
+import { useShare } from "@/hooks/useShare";
 
 const TARGET_SIZE = 64; // Target size in pixels
 
@@ -32,13 +33,16 @@ function NightVisionGame() {
     animationFrameRef,
   } = useNightVision();
 
-  const [shareText, setShareText] = useState("Share my score");
   const [opacity, setOpacity] = useState(0);
   const [position, setPosition] = useState({ top: "50%", left: "50%" });
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const blackBoxRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const nextTest = useNextChallenge();
+  const { shareText, handleShare } = useShare(
+    `I scored an average of ${(results.reduce((a, b) => a + b, 0) / results.length).toFixed(0)}ms on the EyeChallenge Night Vision test! Can you do better? 👀`,
+    "EyeChallenge - Night Vision Test"
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -76,17 +80,7 @@ function NightVisionGame() {
     }
   }, [status, startTime, FADE_DURATION, animationFrameRef]);
 
-  const handleShare = async (avgTime: number) => {
-    const text = `I scored an average of ${avgTime.toFixed(0)}ms on the EyeChallenge Night Vision test! Can you do better? 👀`;
-    const url = window.location.href;
-    if (navigator.share) {
-      await navigator.share({ title: "EyeChallenge - Night Vision Test", text, url });
-    } else {
-      await navigator.clipboard.writeText(`${text}\n${url}`);
-      setShareText("Copied!");
-      setTimeout(() => setShareText("Share my score"), 2000);
-    }
-  };
+
 
   if (status === "idle") {
     return (
@@ -126,7 +120,7 @@ function NightVisionGame() {
         </div>
 
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
-          <button className="btn btn-lg btn-outline" onClick={() => handleShare(averageTime)}>
+          <button className="btn btn-lg btn-outline" onClick={handleShare}>
             <FiShare2 /> {shareText}
           </button>
           <button className="btn btn-lg btn-primary" onClick={goToIdle}>
