@@ -6,7 +6,7 @@ interface InfoProps {
 function Info({ title, description }: InfoProps) {
   return (
     <>
-      <div role="alert" className="alert alert-vertical sm:alert-horizontal max-w-lg mt-10 md:mt-12">
+      <div role="alert" className="alert alert-vertical sm:alert-horizontal max-w-lg mt-4 md:mt-6">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

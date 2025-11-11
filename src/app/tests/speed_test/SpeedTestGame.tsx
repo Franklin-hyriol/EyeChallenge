@@ -38,7 +38,7 @@ function SpeedTestGame() {
 
   useEffect(() => {
     if (status === "waiting" && gameAreaRef.current) {
-      gameAreaRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      gameAreaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [status]);
 

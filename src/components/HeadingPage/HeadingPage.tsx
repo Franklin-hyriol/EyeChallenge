@@ -6,7 +6,7 @@ interface HeadingPageProps {
 
 function HeadingPage({ title, description }: HeadingPageProps) {
   return (
-    <div className="mb-10 text-center md:mb-12 max-w-4xl">
+    <div className="mb-4 text-center md:mb-6 max-w-4xl">
       <h1 className="text-4xl font-black leading-tight tracking-tighter text-text-title-dark md:text-5xl">
         {title}
       </h1>

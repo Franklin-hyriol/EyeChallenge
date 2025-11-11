@@ -44,7 +44,7 @@ export default function ColorTestGame() {
 
   useEffect(() => {
     if (status === "playing" && gameAreaRef.current) {
-      gameAreaRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      gameAreaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [status]);
 
