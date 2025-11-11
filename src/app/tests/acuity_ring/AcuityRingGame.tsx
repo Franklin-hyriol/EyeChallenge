@@ -1,18 +1,31 @@
-'use client';
+"use client";
 
-import { useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useNextChallenge } from '@/hooks/useNextChallenge';
-import { useAcuityRing, GapDirection } from '@/hooks/useAcuityRing';
-import AcuityRing from './AcuityRing';
-import { TbReload } from 'react-icons/tb';
-import { FiShare2, FiAward, FiEye, FiCheckCircle, FiXCircle, FiArrowRight as FiNext } from 'react-icons/fi';
-import clsx from 'clsx';
-import Progress from '@/components/Progress/Progress';
-import { useShare } from '@/hooks/useShare';
+import { useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useNextChallenge } from "@/hooks/useNextChallenge";
+import { useAcuityRing, GapDirection } from "@/hooks/useAcuityRing";
+import AcuityRing from "./AcuityRing";
+import { TbReload } from "react-icons/tb";
+import {
+  FiShare2,
+  FiAward,
+  FiEye,
+  FiCheckCircle,
+  FiXCircle,
+  FiArrowRight as FiNext,
+} from "react-icons/fi";
+import clsx from "clsx";
+import Progress from "@/components/Progress/Progress";
+import { useShare } from "@/hooks/useShare";
 
 // Helper function to calculate the SVG path for a pie slice
-function getPieSlicePath(cx: number, cy: number, radius: number, startAngle: number, endAngle: number): string {
+function getPieSlicePath(
+  cx: number,
+  cy: number,
+  radius: number,
+  startAngle: number,
+  endAngle: number
+): string {
   const start = {
     x: cx + radius * Math.cos((startAngle * Math.PI) / 180),
     y: cy + radius * Math.sin((startAngle * Math.PI) / 180),
@@ -21,18 +34,36 @@ function getPieSlicePath(cx: number, cy: number, radius: number, startAngle: num
     x: cx + radius * Math.cos((endAngle * Math.PI) / 180),
     y: cy + radius * Math.sin((endAngle * Math.PI) / 180),
   };
-  const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
   const path = [
-    'M', start.x, start.y,
-    'A', radius, radius, 0, largeArcFlag, 1, end.x, end.y,
-    'L', cx, cy,
-    'Z',
-  ].join(' ');
+    "M",
+    start.x,
+    start.y,
+    "A",
+    radius,
+    radius,
+    0,
+    largeArcFlag,
+    1,
+    end.x,
+    end.y,
+    "L",
+    cx,
+    cy,
+    "Z",
+  ].join(" ");
   return path;
 }
 
 const DIRECTIONS_MAP: GapDirection[] = [
-  'up', 'up-right', 'right', 'down-right', 'down', 'down-left', 'left', 'up-left',
+  "up",
+  "up-right",
+  "right",
+  "down-right",
+  "down",
+  "down-left",
+  "left",
+  "up-left",
 ];
 
 export default function AcuityRingGame() {
@@ -54,17 +85,26 @@ export default function AcuityRingGame() {
   const router = useRouter();
   const nextTest = useNextChallenge();
   const { shareText, handleShare } = useShare(
-    `I reached level ${level - 1} on the EyeChallenge Acuity Test! Can you beat my score? 👀`,
+    `I reached level ${
+      level - 1
+    } on the EyeChallenge Acuity Test! Can you beat my score? 👀`,
     "EyeChallenge - Acuity Test"
   );
 
   useEffect(() => {
-    if (status === 'playing' && gameAreaRef.current) {
-      gameAreaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    if (status === "playing" && gameAreaRef.current) {
+      gameAreaRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }
   }, [status]);
 
-  if (status === 'idle') {
+  if (status === "idle") {
     return (
       <div className="flex-1 flex flex-col items-center justify-center my-10 md:my-12">
         <button className="btn btn-lg btn-primary" onClick={startGame}>
@@ -74,16 +114,28 @@ export default function AcuityRingGame() {
     );
   }
 
-  if (status === 'result') {
+  if (status === "result") {
     const finalScore = level - 1;
     return (
       <>
         <div className="text-center my-10 md:my-12 max-w-md mx-auto">
           <h2 className="text-2xl font-bold">Test Complete!</h2>
-          <p className="text-xl font-semibold mt-2 mb-4">You reached level {finalScore}</p>
-          <div role="alert" className={clsx('alert', finalScore > 10 ? 'alert-success' : 'alert-info')}>
+          <p className="text-xl font-semibold mt-2 mb-4">
+            You reached level {finalScore}
+          </p>
+          <div
+            role="alert"
+            className={clsx(
+              "alert",
+              finalScore > 10 ? "alert-success" : "alert-info"
+            )}
+          >
             {finalScore > 10 ? <FiAward /> : <FiEye />}
-            <span>{finalScore > 10 ? 'Excellent vision!' : 'Good job! Keep practicing.'}</span>
+            <span>
+              {finalScore > 10
+                ? "Excellent vision!"
+                : "Good job! Keep practicing."}
+            </span>
           </div>
         </div>
         <div className="flex items-center gap-4 mt-8 justify-center flex-wrap">
@@ -93,7 +145,10 @@ export default function AcuityRingGame() {
           <button className="btn btn-lg btn-primary" onClick={startGame}>
             <TbReload /> Play Again
           </button>
-          <button className="btn btn-lg btn-secondary" onClick={() => router.push(`/${nextTest.link}`)}>
+          <button
+            className="btn btn-lg btn-secondary"
+            onClick={() => router.push(`/${nextTest.link}`)}
+          >
             Next Challenge <FiNext />
           </button>
         </div>
@@ -113,20 +168,33 @@ export default function AcuityRingGame() {
       <div className="w-full mt-10 md:mt-12 max-w-4xl">
         <div className="flex items-center justify-center gap-6 sm:gap-10 flex-wrap">
           <div className="text-center flex flex-col">
-            <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">LEVEL</span>
+            <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+              LEVEL
+            </span>
             <span className="text-4xl font-bold leading-normal">{level}</span>
           </div>
           <div className="w-px h-16 bg-slate-500 dark:bg-slate-400 hidden sm:block"></div>
           <div className="text-center flex flex-col">
-            <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">TIME LEFT</span>
-            <span className={clsx('text-4xl font-bold leading-normal text-primary', { 'text-red-500 animate-pulse': timeLeft <= 2 })}>
+            <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+              TIME LEFT
+            </span>
+            <span
+              className={clsx(
+                "text-4xl font-bold leading-normal text-primary",
+                { "text-red-500 animate-pulse": timeLeft <= 2 }
+              )}
+            >
               {timeLeft}s
             </span>
           </div>
           <div className="w-px h-16 bg-slate-500 dark:bg-slate-400 hidden sm:block"></div>
           <div className="text-center flex flex-col">
-            <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">BEST SCORE</span>
-            <span className="text-4xl font-bold leading-normal">{bestScore}</span>
+            <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+              BEST SCORE
+            </span>
+            <span className="text-4xl font-bold leading-normal">
+              {bestScore}
+            </span>
           </div>
         </div>
       </div>
@@ -140,29 +208,43 @@ export default function AcuityRingGame() {
             gapDirection={gapDirection}
             divisions={inputDivisions}
             className={clsx({
-              'text-green-500': feedback === 'correct',
-              'text-red-500': feedback === 'incorrect',
-              'text-base-content': feedback === null,
+              "text-green-500": feedback === "correct",
+              "text-red-500": feedback === "incorrect",
+              "text-base-content": feedback === null,
             })}
           />
           {feedback && (
-            <div className={clsx('absolute inset-0 flex items-center justify-center', {
-                'text-green-500': feedback === 'correct',
-                'text-red-500': feedback === 'incorrect',
-              })}>
-              {feedback === 'correct' && <FiCheckCircle className="text-7xl" />}
-              {feedback === 'incorrect' && <FiXCircle className="text-7xl" />}
+            <div
+              className={clsx(
+                "absolute inset-0 flex items-center justify-center",
+                {
+                  "text-green-500": feedback === "correct",
+                  "text-red-500": feedback === "incorrect",
+                }
+              )}
+            >
+              {feedback === "correct" && <FiCheckCircle className="text-7xl" />}
+              {feedback === "incorrect" && <FiXCircle className="text-7xl" />}
             </div>
           )}
         </div>
 
         {/* Bottom part: The clickable segmented ring */}
         <div className="relative">
-          <svg width={outerRadius * 2} height={outerRadius * 2} viewBox={`0 0 ${outerRadius * 2} ${outerRadius * 2}`}>
+          <svg
+            width={outerRadius * 2}
+            height={outerRadius * 2}
+            viewBox={`0 0 ${outerRadius * 2} ${outerRadius * 2}`}
+          >
             <defs>
               <mask id="hole">
                 <rect width="100%" height="100%" fill="white" />
-                <circle cx={outerRadius} cy={outerRadius} r={innerRadius} fill="black" />
+                <circle
+                  cx={outerRadius}
+                  cy={outerRadius}
+                  r={innerRadius}
+                  fill="black"
+                />
               </mask>
             </defs>
             <g mask="url(#hole)">
@@ -173,7 +255,13 @@ export default function AcuityRingGame() {
                 return (
                   <path
                     key={i}
-                    d={getPieSlicePath(outerRadius, outerRadius, outerRadius, startAngle, endAngle)}
+                    d={getPieSlicePath(
+                      outerRadius,
+                      outerRadius,
+                      outerRadius,
+                      startAngle,
+                      endAngle
+                    )}
                     className="fill-base-content opacity-80 hover:opacity-100 cursor-pointer transition-opacity"
                     onClick={() => handleAnswer(direction)}
                   />

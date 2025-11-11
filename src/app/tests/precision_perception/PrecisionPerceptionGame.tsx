@@ -44,12 +44,17 @@ function PrecisionPerceptionGame() {
   );
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
     if (status === "playing" && gameAreaRef.current) {
-      gameAreaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      gameAreaRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }
   }, [status]);
-
-
 
   if (status === "idle") {
     return (
@@ -128,7 +133,9 @@ function PrecisionPerceptionGame() {
             <span
               className={clsx(
                 "text-4xl font-bold leading-normal",
-                timeRemaining <= 3 ? "text-red-500 animate-pulse" : "text-primary"
+                timeRemaining <= 3
+                  ? "text-red-500 animate-pulse"
+                  : "text-primary"
               )}
             >
               {timeRemaining}s
@@ -139,9 +146,7 @@ function PrecisionPerceptionGame() {
             <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">
               SCORE
             </span>
-            <span className="text-4xl font-bold leading-normal">
-              {score}
-            </span>
+            <span className="text-4xl font-bold leading-normal">{score}</span>
           </div>
         </div>
         {status === "playing" && (
@@ -150,7 +155,9 @@ function PrecisionPerceptionGame() {
             className="alert alert-info flex justify-center mt-4 md:mt-6 w-fit m-auto"
           >
             <FiEye />
-            <span className="font-semibold">Click the circle that is slightly bigger.</span>
+            <span className="font-semibold">
+              Click the circle that is slightly bigger.
+            </span>
           </div>
         )}
       </div>

@@ -45,8 +45,15 @@ function IshiharaGame() {
   );
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
     if (status === "playing" && gameAreaRef.current) {
-      gameAreaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      gameAreaRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }
   }, [status]);
 
@@ -70,8 +77,6 @@ function IshiharaGame() {
     submitAnswer(inputValue);
     setInputValue("");
   };
-
-
 
   if (status === "idle") {
     return (
@@ -149,10 +154,7 @@ function IshiharaGame() {
   }
 
   return (
-    <div
-      ref={gameAreaRef}
-      className="w-full flex flex-col items-center pt-10"
-    >
+    <div ref={gameAreaRef} className="w-full flex flex-col items-center pt-10">
       <Progress value={timeRemaining} maxValue={ROUND_DURATION} />
       <div className="w-full mt-10 md:mt-12 max-w-4xl">
         <div className="flex items-center justify-center gap-6 sm:gap-10 flex-wrap">
@@ -172,7 +174,9 @@ function IshiharaGame() {
             <span
               className={clsx(
                 "text-4xl font-bold leading-normal",
-                timeRemaining <= 5 ? "text-red-500 animate-pulse" : "text-primary"
+                timeRemaining <= 5
+                  ? "text-red-500 animate-pulse"
+                  : "text-primary"
               )}
             >
               {timeRemaining}s
@@ -194,7 +198,9 @@ function IshiharaGame() {
             className="alert alert-info flex justify-center mt-4 md:mt-6 w-fit m-auto"
           >
             <FiEye />
-            <span className="font-semibold">Enter the number you see in the plate.</span>
+            <span className="font-semibold">
+              Enter the number you see in the plate.
+            </span>
           </div>
         )}
       </div>
@@ -206,7 +212,11 @@ function IshiharaGame() {
       {/* Keypad */}
       <div className="w-full max-w-xs space-y-3 flex flex-col items-center">
         <div className="input input-bordered input-lg w-full h-16 text-3xl text-center flex items-center justify-center tracking-widest font-semibold">
-          {inputValue || <span className="text-slate-500 dark:text-slate-400 font-normal">...</span>}
+          {inputValue || (
+            <span className="text-slate-500 dark:text-slate-400 font-normal">
+              ...
+            </span>
+          )}
         </div>
         <div className="grid grid-cols-5 gap-2 w-full">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((digit) => (
@@ -223,20 +233,23 @@ function IshiharaGame() {
           <button onClick={handleClearClick} className="btn btn-lg btn-outline">
             <FiChevronLeft />
           </button>
-          <button onClick={handleSeeNothingClick} className="btn btn-lg btn-outline">
+          <button
+            onClick={handleSeeNothingClick}
+            className="btn btn-lg btn-outline"
+          >
             I see nothing
           </button>
         </div>
-        <button onClick={handleSubmit} className="btn btn-lg btn-primary w-full">
+        <button
+          onClick={handleSubmit}
+          className="btn btn-lg btn-primary w-full"
+        >
           Submit
         </button>
       </div>
 
       <div className="flex items-center gap-4 mt-8">
-        <button
-          className="btn btn-lg btn-primary"
-          onClick={restartGame}
-        >
+        <button className="btn btn-lg btn-primary" onClick={restartGame}>
           <TbReload /> Restart Test
         </button>
       </div>
@@ -263,7 +276,8 @@ function getIshiharaFeedback(score: number) {
   }
   return {
     title: "Potential Deficiency",
-    message: "You may have a color vision deficiency. Consider consulting a specialist.",
+    message:
+      "You may have a color vision deficiency. Consider consulting a specialist.",
     icon: FiAward,
     className: "alert-warning",
   };
