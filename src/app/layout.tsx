@@ -9,6 +9,9 @@ export const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.eyechallenge.fun"),
+  icons: {
+    icon: "/favicon.ico",
+  },
   title: "EyeChallenge – Test Your Eyes & Mind Online",
   description:
     "Put your eyes and brain to the test! EyeChallenge offers fun and accurate online tests to measure your vision, focus, and perception skills.",
