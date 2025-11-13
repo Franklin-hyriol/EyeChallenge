@@ -20,13 +20,13 @@ const Footer = () => (
       </div>
       <nav className="flex gap-6 text-sm">
         <Link className="hover:text-primary transition-colors" href="/about">
-          À propos
+          About
         </Link>
         <Link className="hover:text-primary transition-colors" href="/contact">
-          Contact
+          Contact us
         </Link>
         <Link className="hover:text-primary transition-colors" href="/legal">
-          Mentions légales
+          Legal notice
         </Link>
       </nav>
       <p className="text-sm">
